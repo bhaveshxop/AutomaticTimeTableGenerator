@@ -27,7 +27,6 @@
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-
                         <a class="nav-link" href="./pages/department.php">Departments</a>
                     </li>
                     <li class="nav-item">
