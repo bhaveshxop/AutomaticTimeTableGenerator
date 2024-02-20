@@ -1,0 +1,11 @@
+.navbar-nav .nav-item.dropdown {
+    z-index: 1;
+}
+.navbar-nav .nav-item.dropdown {
+    position: static;
+}
+
+.navbar-nav .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
