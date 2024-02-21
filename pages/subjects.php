@@ -39,6 +39,86 @@
             </div>
         </div>
     </nav>
+
+
+    <div class="container mt-3">
+        <div class="head row">
+            <h2 class="m-0 col-md-6">Subject List</h2>
+        </div>
+        <div class="content">
+            <form class="row g-0 my-3">
+                <!-- Subject name -->
+                <div class="col-md-5 pe-2">
+                    <input type="text" class="form-control" id="subjectName" placeholder="Subject name">
+                </div>
+
+                <!-- Subject Code -->
+                <div class="col-md-3 pe-2">
+                    <input type="text" class="form-control" id="subjectCode" placeholder="Subject Code">
+                </div>
+
+                <!-- Type (Theory or Lab) -->
+                <div class="col-md-2 pe-2">
+                    <select class="form-select" id="type">
+                        <option selected>Type</option>
+                        <option value="1">Theory</option>
+                        <option value="2">Lab</option>
+                    </select>
+                </div>
+
+                <button type="submit" name="addDepartment" class="btn col btn-success col-md-2">Add Subject</button>
+
+
+            </form>
+
+            <div className="table-responsive">
+                <table class="table table-bordered text-center table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Subject Code</th>
+                            <th scope="col">Subject Name</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row">CM5201</td>
+                            <td scope="row">Software Engineering</td>
+                            <td scope="row">Theory</td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row">CM5202</td>
+                            <td scope="row">Data Science</td>
+                            <td scope="row">Theory</td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row">CM5203</td>
+                            <td scope="row">Machine Learning</td>
+                            <td scope="row">Theory</td> 
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td  scope="row">CM5204</td>
+                            <td scope="row">Artificial Intelligence</td>
+                            <td scope="row">Lab</td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
