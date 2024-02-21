@@ -1,3 +1,30 @@
+<?php
+include '../utils/dbcon.php';
+
+function addStaff($conn, $staffName, $shortName)
+{
+    $query = "INSERT INTO staff (staff_name, short_name) VALUES ('$staffName', '$shortName')";
+    return mysqli_query($conn, $query);
+}
+
+function deleteStaff($conn, $shortName)
+{
+    $query = "DELETE FROM staff WHERE short_name = '$shortName'";
+    return mysqli_query($conn, $query);
+}
+
+if (isset($_POST['addStaff'])) {
+    $staffName = $_POST['staffName'];
+    $shortName = $_POST['shortName'];
+    addStaff($conn, $staffName, $shortName);
+}
+
+if (isset($_POST['deleteStaff'])) {
+    $shortNameToDelete = $_POST['deleteStaff'];
+    deleteStaff($conn, $shortNameToDelete);
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,18 +78,18 @@
             </div> -->
         </div>
         <div class="content">
-            <form class="row g-0 my-3">
+            <form method="post" class="row g-0 my-3">
                 <!-- Staff name -->
                 <div class="col-md-6 pe-2">
-                    <input type="text" class="form-control" id="staffName" placeholder="Staff name">
+                    <input type="text" class="form-control" name="staffName" placeholder="Staff name" required>
                 </div>
 
                 <!-- Short name -->
                 <div class="col-md-4 pe-2">
-                    <input type="text" class="form-control" id="shortName" placeholder="Short name">
+                    <input type="text" class="form-control" name="shortName" placeholder="Short name" required>
                 </div>
 
-                <button type="submit" name="addDepartment" class="btn col btn-success col-md-2">Add Staff</button>
+                <button type="submit" name="addStaff" class="btn col btn-success col-md-2">Add Staff</button>
 
             </form>
 
@@ -77,47 +104,48 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td scope="row">Prof. Shilpa S. Jadhav</td>
-                            <td scope="row">SSJ</td>
-                            <td>
-                                <button type="button" class="btn btn-primary btn-sm">Update</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td scope="row">Prof. Mahesh P. Rathod</td>
-                            <td scope="row">MPR</td>
-                            <td>
-                                <button type="button" class="btn btn-primary btn-sm">Update</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td scope="row">Dr. Pravin P. Satav</td>
-                            <td scope="row">DPPS</td>
-                            <td>
-                                <button type="button" class="btn btn-primary btn-sm">Update</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">4</th>
-                            <td scope="row">Prof. Ashivini S. Patil</td>
-                            <td scope="row">ASP</td>
-                            <td>
-                                <button type="button" class="btn btn-primary btn-sm">Update</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
+                    <?php
+                        $result = mysqli_query($conn, "SELECT * FROM staff");
+                        $count = 1;
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo '<tr>';
+                            echo '<th scope="row">' . $count . '</th>';
+                            echo '<td scope="row">' . $row['staff_name'] . '</td>';
+                            echo '<td scope="row">' . $row['short_name'] . '</td>';
+                            echo '<td>';
+                            echo '<button type="button" class="btn btn-primary btn-sm">Update</button>';
+                            echo ' ';
+                            echo '<button type="button" class="btn btn-danger btn-sm" onclick="deleteStaff(\'' . $row['short_name'] . '\')">Delete</button>';
+                            echo '</td>';
+                            echo '</tr>';
+                            $count++;
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script>
+        function deleteStaff(shortName) {
+            if (confirm('Are you sure you want to delete this staff member?')) {
+                var form = document.createElement('form');
+                form.method = 'post';
+                form.action = '';
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'deleteStaff';
+                input.value = shortName;
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+</body>
 </body>
 
 </html>

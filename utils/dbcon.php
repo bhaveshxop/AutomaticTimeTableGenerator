@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "pass123";
+$password = "";
 $dbname = "auto_timetable_generator";
 
 // Create connection
@@ -11,9 +11,6 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-else
-{
-    
-}
+
 
 ?>
