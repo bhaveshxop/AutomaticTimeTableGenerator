@@ -3,9 +3,9 @@
 include('../utils/dbcon.php');
 
 // Function to add a department to the database
-function addDepartment($conn, $deptName, $dCode)
+function addDepartment($conn, $deptName, $dCode , $year, $sections)
 {
-    $query = "INSERT INTO departments (dept_name, d_code) VALUES ('$deptName', '$dCode')";
+    $query = "INSERT INTO departments (dept_name, d_code, year, sections) VALUES ('$deptName', '$dCode', '$year', '$sections')";
     return mysqli_query($conn, $query);
 }
 
@@ -21,9 +21,11 @@ if (isset($_POST['addDepartment'])) {
     // Get values from the input fields
     $deptName = $_POST['departmentName'];
     $dCode = $_POST['departmentCode'];
+    $sections = $_POST['section'];
+    $year = $_POST['year'];
 
     // Add the department to the database
-    addDepartment($conn, $deptName, $dCode);
+    addDepartment($conn, $deptName, $dCode, $year, $sections);
 }
 
 // Check if the Delete button is clicked
@@ -57,9 +59,8 @@ $result = mysqli_query($conn, $query);
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="../">
                 <img src="../Images/logo.webp" width="34" height="36">
-
                 TimeTable</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -73,10 +74,13 @@ $result = mysqli_query($conn, $query);
                         <a class="nav-link active" href="#">Departments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/pages/class.html">Classes</a>
+                        <a class="nav-link" href="./class.php">Classes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Staff</a>
+                        <a class="nav-link" href="./staff.php">Staff</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./subjects.php">Subjects</a>
                     </li>
                 </ul>
             </div>
@@ -89,12 +93,13 @@ $result = mysqli_query($conn, $query);
         </div>
         <div class="content">
             <form method="post">
-                <div class="d-flex mb-3 ">
-                    <!-- Input department name -->
-                    <input type="text" name="departmentName" class="form-control me-2 mt-2" placeholder="Department name">
-                    <!-- Input department code -->
-                    <input type="text" name="departmentCode" class="form-control me-2 mt-2" placeholder="Department code">
-                    <button type="submit" name="addDepartment" class="btn btn-success mt-2 w-25">Add Department</button>
+                <div class="row mb-3 g-0">
+                    <input type="text" name="departmentName" class="form-control col me-2 mt-2" placeholder="Department name">
+                    <input type="text" name="departmentCode" class="form-control col me-2 mt-2" placeholder="Department code">
+                    <input type="text" name="year" class="form-control col me-2 mt-2" placeholder="Total Years">
+                    <input type="text" name="section" class="form-control col  me-2 mt-2" placeholder="Section">
+
+                    <button type="submit" name="addDepartment" class="btn col btn-success mt-2 ">Add Department</button>
                 </div>
             </form>
 
@@ -105,7 +110,7 @@ $result = mysqli_query($conn, $query);
                             <th scope="col">Id</th>
                             <th scope="col">Department name</th>
                             <th scope="col">Code</th>
-                            <th scope="col">Semester</th>
+                            <th scope="col">Total Years</th>
                             <th scope="col">Section</th>
                             <th scope="col">Actions</th>
                         </tr>
@@ -118,8 +123,8 @@ $result = mysqli_query($conn, $query);
                             echo '<th scope="row">' . $row['id'] . '</th>';
                             echo '<td scope="row">' . $row['dept_name'] . '</td>';
                             echo '<td scope="row">' . $row['d_code'] . '</td>';
-                            echo '<td scope="row">Semester</td>';
-                            echo '<td scope="row">section</td>';
+                            echo '<td scope="row">' . $row['year'] . '</td>';
+                            echo '<td scope="row">' . $row['sections'] . '</td>';
                             echo '<td>';
                             echo '<button type="button" class="btn btn-primary btn-sm">View</button>';
                             echo ' ';    

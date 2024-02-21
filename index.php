@@ -30,10 +30,13 @@
                         <a class="nav-link" href="./pages/department.php">Departments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Classes</a>
+                        <a class="nav-link" href="./pages/class.php">Classes</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Staff</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./pages/subjects.php">Subjects</a>
                     </li>
                     <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
