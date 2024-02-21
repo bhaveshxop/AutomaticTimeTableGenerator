@@ -3,7 +3,7 @@
 include('../utils/dbcon.php');
 
 // Function to add a department to the database
-function addDepartment($conn, $deptName, $dCode , $year, $sections)
+function addDepartment($conn, $deptName, $dCode, $year, $sections)
 {
     $query = "INSERT INTO departments (dept_name, d_code, year, sections) VALUES ('$deptName', '$dCode', '$year', '$sections')";
     return mysqli_query($conn, $query);
@@ -57,7 +57,7 @@ $result = mysqli_query($conn, $query);
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="../">
                 <img src="../Images/logo.webp" width="34" height="36">
@@ -127,7 +127,7 @@ $result = mysqli_query($conn, $query);
                             echo '<td scope="row">' . $row['sections'] . '</td>';
                             echo '<td>';
                             echo '<button type="button" class="btn btn-primary btn-sm">View</button>';
-                            echo ' ';    
+                            echo ' ';
                             echo '<button type="button" class="btn btn-danger btn-sm" onclick="deleteDepartment(' . $row['id'] . ')">Delete</button>';
                             echo '</td>';
                             echo '</tr>';
@@ -163,6 +163,3 @@ $result = mysqli_query($conn, $query);
 </body>
 
 </html>
-
-
-
