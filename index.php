@@ -13,8 +13,6 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="">
-
-                <!-- lgogo -->
                 <img src="./Images/logo.webp"  width="34" height="36">
 
                 TimeTable</a>

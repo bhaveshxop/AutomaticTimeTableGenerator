@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff</title>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
 </head>
 
 <body>
@@ -40,6 +38,86 @@
             </div>
         </div>
     </nav>
+
+    <div class="container mt-3">
+        <div class="head row">
+            <h2 class="m-0 col-md-6">Staff List</h2>
+            <!--
+            <div class="col-md-6">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div> -->
+        </div>
+        <div class="content">
+            <form class="row g-0 my-3">
+                <!-- Staff name -->
+                <div class="col-md-6 pe-2">
+                    <input type="text" class="form-control" id="staffName" placeholder="Staff name">
+                </div>
+
+                <!-- Short name -->
+                <div class="col-md-4 pe-2">
+                    <input type="text" class="form-control" id="shortName" placeholder="Short name">
+                </div>
+
+                <button type="submit" name="addDepartment" class="btn col btn-success col-md-2">Add Staff</button>
+
+            </form>
+
+            <div className="table-responsive">
+                <table class="table table-bordered text-center table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sr. no</th>
+                            <th scope="col">Staff name</th>
+                            <th scope="col">Short name</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td scope="row">Prof. Shilpa S. Jadhav</td>
+                            <td scope="row">SSJ</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm">Update</button>
+                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td scope="row">Prof. Mahesh P. Rathod</td>
+                            <td scope="row">MPR</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm">Update</button>
+                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td scope="row">Dr. Pravin P. Satav</td>
+                            <td scope="row">DPPS</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm">Update</button>
+                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">4</th>
+                            <td scope="row">Prof. Ashivini S. Patil</td>
+                            <td scope="row">ASP</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm">Update</button>
+                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
