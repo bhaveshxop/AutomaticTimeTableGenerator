@@ -1,3 +1,46 @@
+<?php
+// Include the database connection file
+include('../utils/dbcon.php');
+
+// Function to add a subject to the database
+function addSubject($conn, $scode, $sname, $stype)
+{
+    $query = "INSERT INTO subjects (scode, sname, stype) VALUES ('$scode', '$sname', '$stype')";
+    return mysqli_query($conn, $query);
+}
+
+// Function to delete a subject from the database
+function deleteSubject($conn, $scode)
+{
+    $query = "DELETE FROM subjects WHERE scode = '$scode'";
+    return mysqli_query($conn, $query);
+}
+
+// Check if the Add Subject button is clicked
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['addSubject'])) {
+    // Get values from the input fields
+    $scode = $_POST['subjectCode'];
+    $sname = $_POST['subjectName'];
+    $stype = $_POST['type'];
+
+    // Add the subject to the database
+    addSubject($conn, $scode, $sname, $stype);
+}
+
+// Check if the Delete button is clicked
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deleteSubject'])) {
+    // Get subject code from the clicked row
+    $scodeToDelete = $_POST['deleteSubject'];
+
+    // Delete the subject from the database
+    deleteSubject($conn, $scodeToDelete);
+}
+
+// Fetch data from the database
+$query = "SELECT * FROM subjects";
+$result = mysqli_query($conn, $query);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,38 +83,35 @@
         </div>
     </nav>
 
-
     <div class="container mt-3">
         <div class="head row">
             <h2 class="m-0 col-md-6">Subject List</h2>
         </div>
         <div class="content">
-            <form class="row g-0 my-3">
+            <form method="post" class="row g-0 my-3">
                 <!-- Subject name -->
                 <div class="col-md-5 pe-2">
-                    <input type="text" class="form-control" id="subjectName" placeholder="Subject name">
+                    <input type="text" class="form-control" name="subjectName" placeholder="Subject name" required>
                 </div>
 
                 <!-- Subject Code -->
                 <div class="col-md-3 pe-2">
-                    <input type="text" class="form-control" id="subjectCode" placeholder="Subject Code">
+                    <input type="text" class="form-control" name="subjectCode" placeholder="Subject Code" required>
                 </div>
 
                 <!-- Type (Theory or Lab) -->
                 <div class="col-md-2 pe-2">
-                    <select class="form-select" id="type">
-                        <option selected>Type</option>
-                        <option value="1">Theory</option>
-                        <option value="2">Lab</option>
+                    <select class="form-select" name="type" required>
+                        <option selected disabled>Type</option>
+                        <option value="Theory">Theory</option>
+                        <option value="Lab">Lab</option>
                     </select>
                 </div>
 
-                <button type="submit" name="addDepartment" class="btn col btn-success col-md-2">Add Subject</button>
-
-
+                <button type="submit" name="addSubject" class="btn col btn-success col-md-2">Add Subject</button>
             </form>
 
-            <div className="table-responsive">
+            <div class="table-responsive">
                 <table class="table table-bordered text-center table-hover">
                     <thead>
                         <tr>
@@ -82,43 +122,45 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td scope="row">CM5201</td>
-                            <td scope="row">Software Engineering</td>
-                            <td scope="row">Theory</td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td scope="row">CM5202</td>
-                            <td scope="row">Data Science</td>
-                            <td scope="row">Theory</td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td scope="row">CM5203</td>
-                            <td scope="row">Machine Learning</td>
-                            <td scope="row">Theory</td> 
-                            <td>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td  scope="row">CM5204</td>
-                            <td scope="row">Artificial Intelligence</td>
-                            <td scope="row">Lab</td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
+                        <?php
+                        // Loop through the fetched data and display it in the table
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo '<tr>';
+                            echo '<td scope="row">' . $row['scode'] . '</td>';
+                            echo '<td scope="row">' . $row['sname'] . '</td>';
+                            echo '<td scope="row">' . $row['stype'] . '</td>';
+                            echo '<td>';
+                            echo '<button type="button" class="btn btn-danger btn-sm" onclick="deleteSubject(\'' . $row['scode'] . '\')">Delete</button>';
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        // JavaScript function to confirm and delete a subject
+        function deleteSubject(scode) {
+            if (confirm('Are you sure you want to delete this subject?')) {
+                // If the user confirms, submit the form with the subject code
+                var form = document.createElement('form');
+                form.method = 'post';
+                form.action = '';
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'deleteSubject';
+                input.value = scode;
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
 </body>
 
 </html>
+
