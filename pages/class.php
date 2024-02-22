@@ -1,3 +1,20 @@
+<?php
+// Include the database connection file
+include('../utils/dbcon.php');
+
+//fetch departments from the database
+$departments = $conn->query("SELECT * FROM departments");
+
+//fetch year from the database
+function getYear($dept_id)
+{
+    global $conn;
+    $no_years = $conn->query("SELECT year FROM departments WHERE dept_id = $dept_id");
+    return $no_years;
+}
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -48,22 +65,21 @@
             <div class="d-flex justify-content-between mb-3">
                 <div class="d-flex  ">
                     <div class="sel-dept">
-                        <select class="form-select form-select-sm" aria-label="Default select example">
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="dept">
                             <option selected>Select department</option>
-                            <option value="1">Computer Science</option>
-                            <option value="2">Information Technology</option>
-                            <option value="3">Electronics Engineering</option>
-                            <option value="4">Mechanical Engineering</option>
+                            <?php
+                            if ($departments->num_rows > 0) {
+                                while ($row = $departments->fetch_assoc()) {
+                                    echo "<option value=" . $row['id'] . ">" . $row['dept_name'] . "</option>";
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
 
                     <div class="sel-sem ms-3">
-                        <select class="form-select form-select-sm" aria-label="Default select example">
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="year">
                             <option selected>Select year</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
                         </select>
                     </div>
 
@@ -146,7 +162,6 @@
                                 <button type="button" class="btn btn-danger btn-sm">Delete</button>
                             </td>
                         </tr>
-
                         <tr>
                             <td scope="row">Computer Networks</td>
                             <td scope="row">CS104</td>
@@ -159,14 +174,18 @@
                                 <button type="button" class="btn btn-danger btn-sm">Delete</button>
                             </td>
                         </tr>
-
-
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        document.getElementById('dept').addEventListener('change', function() {
+            var dept_id = this.value;
+            alert(dept_id);
+        });
+    </script>
 </body>
 
 </html>
