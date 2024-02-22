@@ -2,6 +2,7 @@
 // Include the database connection file
 include('../utils/dbcon.php');
 
+
 // Function to add a subject to the database
 function addSubject($conn, $scode, $sname, $stype)
 {
@@ -10,9 +11,9 @@ function addSubject($conn, $scode, $sname, $stype)
 }
 
 // Function to delete a subject from the database
-function deleteSubject($conn, $scode)
+function deleteSubject($conn, $sub_id)
 {
-    $query = "DELETE FROM subjects WHERE scode = '$scode'";
+    $query = "DELETE FROM subjects WHERE sub_id = '$sub_id'";
     return mysqli_query($conn, $query);
 }
 
@@ -115,6 +116,7 @@ $result = mysqli_query($conn, $query);
                 <table class="table table-bordered text-center table-hover">
                     <thead>
                         <tr>
+                            <th scope="col">ID</th>
                             <th scope="col">Subject Code</th>
                             <th scope="col">Subject Name</th>
                             <th scope="col">Type</th>
@@ -126,11 +128,12 @@ $result = mysqli_query($conn, $query);
                         // Loop through the fetched data and display it in the table
                         while ($row = mysqli_fetch_assoc($result)) {
                             echo '<tr>';
+                            echo '<td scope="row">' . $row['sub_id'] . '</td>';
                             echo '<td scope="row">' . $row['scode'] . '</td>';
                             echo '<td scope="row">' . $row['sname'] . '</td>';
                             echo '<td scope="row">' . $row['stype'] . '</td>';
                             echo '<td>';
-                            echo '<button type="button" class="btn btn-danger btn-sm" onclick="deleteSubject(\'' . $row['scode'] . '\')">Delete</button>';
+                            echo '<button type="button" class="btn btn-danger btn-sm" onclick="deleteSubject(\'' . $row['sub_id'] . '\')">Delete</button>';
                             echo '</td>';
                             echo '</tr>';
                         }

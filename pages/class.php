@@ -90,6 +90,7 @@
                             <th scope="col">Type</th>
                             <th scope="col">Staff name</th>
                             <th scope="col">Total in week</th>
+                            <th scope="col">Duration</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -100,6 +101,7 @@
                             <td scope="row">Theory</td>
                             <td scope="row">Prof. Shilpa S. Jadhav</td>
                             <td scope="row">2</td>
+                            <td scope="row">45 min</td>
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm">View</button>
                                 <button type="button" class="btn btn-danger btn-sm">Delete</button>
@@ -111,6 +113,8 @@
                             <td scope="row">Theory</td>
                             <td scope="row">Prof. Mahesh P. Rathod</td>
                             <td scope="row">5</td>
+                            <td scope="row">45 min</td>
+
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm">View</button>
                                 <button type="button" class="btn btn-danger btn-sm">Delete</button>
@@ -123,6 +127,7 @@
                             <td scope="row">Lab</td>
                             <td scope="row">Dr. Pravin P. Satav</td>
                             <td scope="row">4</td>
+                            <td scope="row">120 min</td>
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm">View</button>
                                 <button type="button" class="btn btn-danger btn-sm">Delete</button>
@@ -135,6 +140,7 @@
                             <td scope="row">Theory</td>
                             <td scope="row">Prof. Ashivini S. Patil</td>
                             <td scope="row">5</td>
+                            <td scope="row">45 min</td>
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm">View</button>
                                 <button type="button" class="btn btn-danger btn-sm">Delete</button>
@@ -147,6 +153,7 @@
                             <td scope="row">Theory</td>
                             <td scope="row">Prof. Archana Jane</td>
                             <td scope="row">4</td>
+                            <td scope="row">45 min</td>
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm">View</button>
                                 <button type="button" class="btn btn-danger btn-sm">Delete</button>
