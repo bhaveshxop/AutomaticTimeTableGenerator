@@ -4,14 +4,43 @@ include('../utils/dbcon.php');
 
 //fetch departments from the database
 $departments = $conn->query("SELECT * FROM departments");
-
+$year = 0;
+$sections = 0;
 //fetch year from the database
 function getYear($dept_id)
 {
     global $conn;
-    $no_years = $conn->query("SELECT year FROM departments WHERE dept_id = $dept_id");
+    $no_years = $conn->query("SELECT year FROM departments WHERE id = $dept_id");
     return $no_years;
 }
+
+if (isset($_POST['dept'])) {
+   
+    $id = $_POST['dept'];
+    
+    $sql = "SELECT year,sections FROM departments WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id); // "i" indicates integer type for the parameter
+$stmt->execute();
+
+// Bind result variable
+$stmt->bind_result($year,$sections);
+
+// Fetch value
+if ($stmt->fetch()) {
+    // Value retrieved successfully
+    echo " " ;// Output the retrieved year
+} else {
+    // No rows matched the query
+    echo "No year found for the specified id";
+}
+
+// Close statement and connection
+$stmt->close();
+$conn->close();
+
+}
+
 
 ?>
 
@@ -70,7 +99,10 @@ function getYear($dept_id)
                             <?php
                             if ($departments->num_rows > 0) {
                                 while ($row = $departments->fetch_assoc()) {
-                                    echo "<option value=" . $row['id'] . ">" . $row['dept_name'] . "</option>";
+                                   // echo "<option onchange= 'fetchYears(".$row['id'].")' >" . $row['dept_name'] . "</option>";
+                                    //echo "<option onchange='getYear(".$row['id'].")'value=" . $row['id'] . ">" . $row['dept_name'] . "</option>";
+                                    echo "<option onchange='Year(" . $row['id'] . ")' value='" . $row['id'] . "'>" . $row['dept_name'] . "</option>";
+
                                 }
                             }
                             ?>
@@ -80,15 +112,25 @@ function getYear($dept_id)
                     <div class="sel-sem ms-3">
                         <select class="form-select form-select-sm" aria-label="Default select example" id="year">
                             <option selected>Select year</option>
+                            <?php 
+                                for($i = 1;$i <= $year;$i++)
+                                echo "<option>$i</option>";
+                            
+                            ?>
                         </select>
                     </div>
 
                     <div class="sel-sec ms-3">
                         <select class="form-select form-select-sm" aria-label="Default select example">
                             <option selected>Select section</option>
-                            <option value="1">A</option>
-                            <option value="2">B</option>
-                            <option value="3">C</option>
+                            <?php 
+                                for($i = 1; $i <= $sections; $i++) {
+                                   $ascii = 64 + $i;
+                                    $alphabet_character = chr($ascii);
+                                    echo "<option value='$i'>$alphabet_character</option>";
+                                }
+                                ?>
+
                         </select>
                     </div>
                 </div>
@@ -181,11 +223,38 @@ function getYear($dept_id)
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script>
-        document.getElementById('dept').addEventListener('change', function() {
-            var dept_id = this.value;
-            alert(dept_id);
-        });
+        // document.getElementById('dept').addEventListener('change', function() {
+        //      var dept_id = this.value;
+        //      alert(dept_id);
+
+        //  });
+        //  function getYear(deptid){
+        //     alert(deptid);
+        //  }
+
+
+    document.getElementById('dept').addEventListener('change', function() {
+        var deptId = this.value;
+        Year(deptId);
+    });
+
+    function Year(deptId){
+        alert(deptId);
+                var form = document.createElement('form');
+                form.method = 'post';
+                form.action = '';
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'dept';
+                input.value = deptId;
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+    }
     </script>
+
+
+    </>
 </body>
 
 </html>
