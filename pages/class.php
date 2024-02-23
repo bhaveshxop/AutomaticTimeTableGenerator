@@ -232,10 +232,11 @@ if (isset($_POST['dept'])) {
                                     <div class="mb-3">
                                         <select class="form-select" id="subject">
                                             <option selected>Select Subject</option>
-                                            <option value="1">FC205 - Data Structures</option>
-                                            <option value="2">FC206 - Database Management System</option>
-                                            <option value="3">FC207 - Computer Networks</option>
-                                            <option value="4">FC208 - Python Programming</option>
+                                            <option value="1">FC205 - Data Structures (Theory)</option>
+                                            <option value="2">FC206 - Database Management System (Theory)</option>
+                                            <option value="4">FC208 - Python Programming (Theory)</option>
+                                            <option value="3">FC207 - Computer Networks (Theory)</option>
+                                            <option value="4">FC208 - Python Programming (Lab)</option>
                                         </select>
                                     </div>
 
@@ -248,15 +249,6 @@ if (isset($_POST['dept'])) {
                                             <option value="3">Dr. Pravin P. Satav</option>
                                             <option value="4">Prof. Ashivini S. Patil</option>
                                             <option value="5">Prof. Archana Jane</option>
-                                        </select>
-                                    </div>
-
-                                    <!-- Select type -->
-                                    <div class="mb-3">
-                                        <select class="form-select" id="type">
-                                            <option selected>Select Type</option>
-                                            <option value="1">Theory</option>
-                                            <option value="2">Lab</option>
                                         </select>
                                     </div>
 
