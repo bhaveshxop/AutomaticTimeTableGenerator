@@ -98,7 +98,7 @@ $result = mysqli_query($conn, $query);
                     <input type="text" name="departmentCode" class="form-control col me-2 mt-2" placeholder="Department code">
                     <input type="text" name="year" class="form-control col me-2 mt-2" placeholder="Total Years">
                     <input type="text" name="section" class="form-control col  me-2 mt-2" placeholder="Section">
-
+    
                     <button type="submit" name="addDepartment" class="btn col btn-success mt-2 ">Add Department</button>
                 </div>
             </form>

@@ -298,7 +298,7 @@ if (isset($_POST['dept'])) {
         });
 
         function Year(deptId) {
-            alert(deptId);
+         
             var form = document.createElement('form');
             form.method = 'post';
             form.action = '';
