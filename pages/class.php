@@ -259,7 +259,7 @@ if (isset($_POST['dept'])) {
 
                                     <!-- Enter duration -->
                                     <div class="mb-3">
-                                        <input type="number" class="form-control" id="duration" placeholder="Duration in minutes" required>
+                                        <input type="number" class="form-control" id="duration" placeholder="Duration in hours" required>
                                     </div>
                             </div>
                             <div class="modal-footer">
