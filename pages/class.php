@@ -2,45 +2,44 @@
 // Include the database connection file
 include('../utils/dbcon.php');
 
-//fetch departments from the database
+// Fetch departments from the database
 $departments = $conn->query("SELECT * FROM departments");
-$year = 0;
-$sections = 0;
-//fetch year from the database
-function getYear($dept_id)
+
+// Fetch years for the selected department
+function getYears($dept_id)
 {
     global $conn;
-    $no_years = $conn->query("SELECT year FROM departments WHERE id = $dept_id");
-    return $no_years;
-}
-
-if (isset($_POST['dept'])) {
-
-    $id = $_POST['dept'];
-
-    $sql = "SELECT year,sections FROM departments WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id); // "i" indicates integer type for the parameter
-    $stmt->execute();
-
-    // Bind result variable
-    $stmt->bind_result($year, $sections);
-
-    // Fetch value
-    if ($stmt->fetch()) {
-        // Value retrieved successfully
-        echo " "; // Output the retrieved year
-    } else {
-        // No rows matched the query
-        echo "No year found for the specified id";
+    $yearsResult = $conn->query("SELECT year FROM departments WHERE id = $dept_id");
+    if ($yearsResult && $yearsResult->num_rows > 0) {
+        $row = $yearsResult->fetch_assoc();
+        return $row['year'];
     }
-
-    // Close statement and connection
-    $stmt->close();
-    $conn->close();
+    return 0;
 }
 
+function getSections($dept_id)
+{
+    global $conn;
+    $sectionsResult = $conn->query("SELECT sections FROM departments WHERE id = $dept_id");
+    if ($sectionsResult && $sectionsResult->num_rows > 0) {
+        $row = $sectionsResult->fetch_assoc();
+        return $row['sections'];
+    }
+    return 0;
+}
 
+if (isset($_POST['save'])) {
+    $subject = $_POST['subject'];
+    $staff = $_POST['staff'];
+    $totalPeriods = $_POST['totalPeriods'];
+    $duration = $_POST['duration'];
+    $dept = $_POST['dept_hidden'];
+    $year = $_POST['year_hidden'];
+    $section = $_POST['section_hidden'];
+    echo "Subject: $subject, Staff: $staff, Total Periods: $totalPeriods, Duration: $duration, Department: $dept, Year: $year, Section: $section<br>";
+    $query = "INSERT INTO assigned(dept_id, year, section, sub_id, staff_short_name, duration,total_in_week) VALUES ('$dept', '$year', '$section', '$subject', '$staff', '$duration', '$totalPeriods')";
+    $conn->query($query);
+}
 ?>
 
 <!doctype html>
@@ -49,7 +48,9 @@ if (isset($_POST['dept'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous">
 
     <title>Class Information</title>
 </head>
@@ -83,6 +84,7 @@ if (isset($_POST['dept'])) {
                 </ul>
             </div>
         </div>
+
     </nav>
 
     <div class="container mt-3">
@@ -93,14 +95,12 @@ if (isset($_POST['dept'])) {
             <div class="d-flex justify-content-between mb-3">
                 <div class="d-flex  ">
                     <div class="sel-dept">
-                        <select class="form-select form-select-sm" aria-label="Default select example" id="dept">
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="dept" onchange="departmentChange()" name="dept">
                             <option selected>Select department</option>
                             <?php
                             if ($departments->num_rows > 0) {
                                 while ($row = $departments->fetch_assoc()) {
-                                    // echo "<option onchange= 'fetchYears(".$row['id'].")' >" . $row['dept_name'] . "</option>";
-                                    //echo "<option onchange='getYear(".$row['id'].")'value=" . $row['id'] . ">" . $row['dept_name'] . "</option>";
-                                    echo "<option onchange='Year(" . $row['id'] . ")' value='" . $row['id'] . "'>" . $row['dept_name'] . "</option>";
+                                    echo "<option value=" . $row['id'] . ">" . $row['dept_name'] . "</option>";
                                 }
                             }
                             ?>
@@ -108,38 +108,27 @@ if (isset($_POST['dept'])) {
                     </div>
 
                     <div class="sel-sem ms-3">
-                        <select class="form-select form-select-sm" aria-label="Default select example" id="year">
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="year" name="year"
+                        onChange="document.getElementsByName('dept_hidden')[0].value = document.getElementById('dept').value;
+                        document.getElementsByName('year_hidden')[0].value = document.getElementById('year').value;"
+                        >
                             <option selected>Select year</option>
-                            <?php
-                            for ($i = 1; $i <= $year; $i++)
-                                echo "<option>$i</option>";
-
-                            ?>
                         </select>
                     </div>
 
                     <div class="sel-sec ms-3">
-                        <select class="form-select form-select-sm" aria-label="Default select example">
+                        <select class="form-select form-select-sm" aria-label="Default select example" id="section" name="section" onChange="document.getElementsByName('section_hidden')[0].value = document.getElementById('section').value;"
+                        >
                             <option selected>Select section</option>
-                            <?php
-                            for ($i = 1; $i <= $sections; $i++) {
-                                $ascii = 64 + $i;
-                                $alphabet_character = chr($ascii);
-                                echo "<option value='$i'>$alphabet_character</option>";
-                            }
-                            ?>
-
                         </select>
                     </div>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#assignModal">
-                        Assign
-                    </button>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#assignModal">Assign</button>
                 </div>
             </div>
 
-            <div className="table-responsive">
+            <div class="table-responsive">
                 <table class="table table-bordered text-center table-hover">
                     <thead>
                         <tr>
@@ -153,157 +142,133 @@ if (isset($_POST['dept'])) {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td scope="row">Python Programming</td>
-                            <td scope="row">CS101</td>
-                            <td scope="row">Theory</td>
-                            <td scope="row">Prof. Shilpa S. Jadhav</td>
-                            <td scope="row">2</td>
-                            <td scope="row">45 min</td>
-                            <td>
-                                <button type="button" class="btn btn-primary btn-sm">View</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td scope="row">Data Structures</td>
-                            <td scope="row">CS102</td>
-                            <td scope="row">Theory</td>
-                            <td scope="row">Prof. Mahesh P. Rathod</td>
-                            <td scope="row">5</td>
-                            <td scope="row">45 min</td>
-
-                            <td>
-                                <button type="button" class="btn btn-primary btn-sm">View</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td scope="row">Python Programming</td>
-                            <td scope="row">CS101</td>
-                            <td scope="row">Lab</td>
-                            <td scope="row">Dr. Pravin P. Satav</td>
-                            <td scope="row">4</td>
-                            <td scope="row">120 min</td>
-                            <td>
-                                <button type="button" class="btn btn-primary btn-sm">View</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td scope="row">Database Management System</td>
-                            <td scope="row">CS103</td>
-                            <td scope="row">Theory</td>
-                            <td scope="row">Prof. Ashivini S. Patil</td>
-                            <td scope="row">5</td>
-                            <td scope="row">45 min</td>
-                            <td>
-                                <button type="button" class="btn btn-primary btn-sm">View</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td scope="row">Computer Networks</td>
-                            <td scope="row">CS104</td>
-                            <td scope="row">Theory</td>
-                            <td scope="row">Prof. Archana Jane</td>
-                            <td scope="row">4</td>
-                            <td scope="row">45 min</td>
-                            <td>
-                                <button type="button" class="btn btn-primary btn-sm">View</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
+                        <!-- Your table rows will go here -->
                     </tbody>
                 </table>
-                
-
-                <div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <form class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="assignModalLabel"> Assign Class Periods </h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                    <!-- Select subject -->
-                                    <div class="mb-3">
-                                        <select class="form-select" id="subject">
-                                            <option selected>Select Subject</option>
-                                            <option value="1">FC205 - Data Structures (Theory)</option>
-                                            <option value="2">FC206 - Database Management System (Theory)</option>
-                                            <option value="4">FC208 - Python Programming (Theory)</option>
-                                            <option value="3">FC207 - Computer Networks (Theory)</option>
-                                            <option value="4">FC208 - Python Programming (Lab)</option>
-                                        </select>
-                                    </div>
-
-                                    <!-- Select staff -->
-                                    <div class="mb-3">
-                                        <select class="form-select" id="staff">
-                                            <option selected>Select Staff</option>
-                                            <option value="1">Prof. Shilpa S. Jadhav</option>
-                                            <option value="2">Prof. Mahesh P. Rathod</option>
-                                            <option value="3">Dr. Pravin P. Satav</option>
-                                            <option value="4">Prof. Ashivini S. Patil</option>
-                                            <option value="5">Prof. Archana Jane</option>
-                                        </select>
-                                    </div>
-
-                                    <!-- Enter total periods in week-->
-                                    <div class="mb-3">
-                                        <input type="number" class="form-control" id="totalPeriods" placeholder="Total periods in week" required>
-                                    </div>
-
-                                    <!-- Enter duration -->
-                                    <div class="mb-3">
-                                        <input type="number" class="form-control" id="duration" placeholder="Duration in hours" required>
-                                    </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script>
-        // document.getElementById('dept').addEventListener('change', function() {
-        //      var dept_id = this.value;
-        //      alert(dept_id);
 
-        //  });
-        //  function getYear(deptid){
-        //     alert(deptid);
-        //  }
+    <div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="assignModalLabel"> Assign Class Periods </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Select subject -->
+                    <div class="mb-3">
+                        <select class="form-select" id="subject" name="subject">
+                            <option selected>Select Subject</option>
+                            <?php
+                            $subjects = $conn->query("SELECT sub_id, scode, sname, stype FROM subjects");
+                            if ($subjects->num_rows > 0) {
+                                while ($row = $subjects->fetch_assoc()) {
+                                    echo "<option value='" . $row['sub_id'] . "'>" . $row['scode'] . " - " . $row['sname'] . " (" . $row['stype'] . ")</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
 
+                    <!-- Select staff -->
+                    <div class="mb-3">
+                        <select class="form-select" id="staff" name="staff">
+                            <option selected>Select Staff</option>
+                            <?php
+                            $staff = $conn->query("SELECT staff_name, short_name FROM staff");
+                            if ($staff->num_rows > 0) {
+                                while ($row = $staff->fetch_assoc()) {
+                                    echo "<option value='" . $row['short_name'] . "'>" . $row['staff_name'] . " (" . $row['short_name'] . ")</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-        document.getElementById('dept').addEventListener('change', function() {
-            var deptId = this.value;
-            Year(deptId);
-        });
+                    <!-- Enter total periods in the week -->
+                    <div class="mb-3">
+                        <input type="number" class="form-control" id="totalPeriods" name="totalPeriods" placeholder="Total periods in the week" required>
+                    </div>
 
-        function Year(deptId) {
-         
-            var form = document.createElement('form');
-            form.method = 'post';
-            form.action = '';
-            var input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'dept';
-            input.value = deptId;
-            form.appendChild(input);
-            document.body.appendChild(form);
-            form.submit();
+                    <!-- Enter duration -->
+                    <div class="mb-3">
+                        <input type="number" class="form-control" id="duration" name="duration" placeholder="Duration in hours" required>
+                    </div>
+                </div>
+
+                <input type="hidden" name="dept_hidden" name="dept_hidden" value="">
+                <input type="hidden" name="year_hidden" name="year_hidden" value="">
+                <input type="hidden" name="section_hidden" name="section_hidden" value="">  
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="save" name="save">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+<script>
+    // When the department dropdown changes
+    function departmentChange() {
+        // Get the selected department ID
+        var deptId = document.getElementById('dept').value;
+
+        // Get the select element for years and sections
+        var yearSelect = document.getElementById('year');
+        var sectionSelect = document.getElementById('section');
+
+       
+
+        // Remove existing options
+        yearSelect.options.length = 0;
+        sectionSelect.options.length = 0;
+
+        // Fetch years for the selected department using PHP
+        <?php
+        if ($departments->num_rows > 0) {
+            $departments->data_seek(0); // Reset the pointer to the beginning
+            while ($row = $departments->fetch_assoc()) {
+                $currentDeptId = $row['id'];
+                $years = getYears($currentDeptId);
+                echo "if (deptId == $currentDeptId) {";
+                echo "yearSelect.options.add(new Option('Select year', ''));";
+                for ($i = 1; $i <= $years; $i++) {
+                    echo "yearSelect.options.add(new Option('$i', '$i'));";
+                }
+                echo "}";
+            }
         }
-    </script>
-    </>
-</body>
 
+        if ($departments->num_rows > 0) {
+            $departments->data_seek(0);
+            while ($row = $departments->fetch_assoc()) {
+                $currentDeptId = $row['id'];
+                $sections = getSections($currentDeptId);
+                echo "if(deptId == $currentDeptId){";
+                echo "sectionSelect.options.add(new Option('Select section', ''));";
+                for ($i = 1; $i <= $sections; $i++) {
+                    $alpha = chr(64 + $i);
+                    echo "sectionSelect.options.add(new Option('$alpha', '$i'));";
+                }
+                echo "}";
+            }
+        }
+        ?>
+    }
+
+    // Initialize year options on page load
+    window.onload = function () {
+        departmentChange();
+    };
+</script>
+</body>
 </html>
+
