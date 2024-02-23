@@ -15,30 +15,29 @@ function getYear($dept_id)
 }
 
 if (isset($_POST['dept'])) {
-   
+
     $id = $_POST['dept'];
-    
+
     $sql = "SELECT year,sections FROM departments WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id); // "i" indicates integer type for the parameter
-$stmt->execute();
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id); // "i" indicates integer type for the parameter
+    $stmt->execute();
 
-// Bind result variable
-$stmt->bind_result($year,$sections);
+    // Bind result variable
+    $stmt->bind_result($year, $sections);
 
-// Fetch value
-if ($stmt->fetch()) {
-    // Value retrieved successfully
-    echo " " ;// Output the retrieved year
-} else {
-    // No rows matched the query
-    echo "No year found for the specified id";
-}
+    // Fetch value
+    if ($stmt->fetch()) {
+        // Value retrieved successfully
+        echo " "; // Output the retrieved year
+    } else {
+        // No rows matched the query
+        echo "No year found for the specified id";
+    }
 
-// Close statement and connection
-$stmt->close();
-$conn->close();
-
+    // Close statement and connection
+    $stmt->close();
+    $conn->close();
 }
 
 
@@ -99,10 +98,9 @@ $conn->close();
                             <?php
                             if ($departments->num_rows > 0) {
                                 while ($row = $departments->fetch_assoc()) {
-                                   // echo "<option onchange= 'fetchYears(".$row['id'].")' >" . $row['dept_name'] . "</option>";
+                                    // echo "<option onchange= 'fetchYears(".$row['id'].")' >" . $row['dept_name'] . "</option>";
                                     //echo "<option onchange='getYear(".$row['id'].")'value=" . $row['id'] . ">" . $row['dept_name'] . "</option>";
                                     echo "<option onchange='Year(" . $row['id'] . ")' value='" . $row['id'] . "'>" . $row['dept_name'] . "</option>";
-
                                 }
                             }
                             ?>
@@ -112,10 +110,10 @@ $conn->close();
                     <div class="sel-sem ms-3">
                         <select class="form-select form-select-sm" aria-label="Default select example" id="year">
                             <option selected>Select year</option>
-                            <?php 
-                                for($i = 1;$i <= $year;$i++)
+                            <?php
+                            for ($i = 1; $i <= $year; $i++)
                                 echo "<option>$i</option>";
-                            
+
                             ?>
                         </select>
                     </div>
@@ -123,19 +121,21 @@ $conn->close();
                     <div class="sel-sec ms-3">
                         <select class="form-select form-select-sm" aria-label="Default select example">
                             <option selected>Select section</option>
-                            <?php 
-                                for($i = 1; $i <= $sections; $i++) {
-                                   $ascii = 64 + $i;
-                                    $alphabet_character = chr($ascii);
-                                    echo "<option value='$i'>$alphabet_character</option>";
-                                }
-                                ?>
+                            <?php
+                            for ($i = 1; $i <= $sections; $i++) {
+                                $ascii = 64 + $i;
+                                $alphabet_character = chr($ascii);
+                                echo "<option value='$i'>$alphabet_character</option>";
+                            }
+                            ?>
 
                         </select>
                     </div>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-success ">Assign</button>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#assignModal">
+                        Assign
+                    </button>
                 </div>
             </div>
 
@@ -218,6 +218,65 @@ $conn->close();
                         </tr>
                     </tbody>
                 </table>
+                
+
+                <div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="assignModalLabel"> Assign Class Periods </h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                    <!-- Select subject -->
+                                    <div class="mb-3">
+                                        <select class="form-select" id="subject">
+                                            <option selected>Select Subject</option>
+                                            <option value="1">FC205 - Data Structures</option>
+                                            <option value="2">FC206 - Database Management System</option>
+                                            <option value="3">FC207 - Computer Networks</option>
+                                            <option value="4">FC208 - Python Programming</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Select staff -->
+                                    <div class="mb-3">
+                                        <select class="form-select" id="staff">
+                                            <option selected>Select Staff</option>
+                                            <option value="1">Prof. Shilpa S. Jadhav</option>
+                                            <option value="2">Prof. Mahesh P. Rathod</option>
+                                            <option value="3">Dr. Pravin P. Satav</option>
+                                            <option value="4">Prof. Ashivini S. Patil</option>
+                                            <option value="5">Prof. Archana Jane</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Select type -->
+                                    <div class="mb-3">
+                                        <select class="form-select" id="type">
+                                            <option selected>Select Type</option>
+                                            <option value="1">Theory</option>
+                                            <option value="2">Lab</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Enter total periods in week-->
+                                    <div class="mb-3">
+                                        <input type="number" class="form-control" id="totalPeriods" placeholder="Total periods in week" required>
+                                    </div>
+
+                                    <!-- Enter duration -->
+                                    <div class="mb-3">
+                                        <input type="number" class="form-control" id="duration" placeholder="Duration in minutes" required>
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -233,27 +292,25 @@ $conn->close();
         //  }
 
 
-    document.getElementById('dept').addEventListener('change', function() {
-        var deptId = this.value;
-        Year(deptId);
-    });
+        document.getElementById('dept').addEventListener('change', function() {
+            var deptId = this.value;
+            Year(deptId);
+        });
 
-    function Year(deptId){
-        alert(deptId);
-                var form = document.createElement('form');
-                form.method = 'post';
-                form.action = '';
-                var input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'dept';
-                input.value = deptId;
-                form.appendChild(input);
-                document.body.appendChild(form);
-                form.submit();
-    }
+        function Year(deptId) {
+            alert(deptId);
+            var form = document.createElement('form');
+            form.method = 'post';
+            form.action = '';
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'dept';
+            input.value = deptId;
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
     </script>
-
-
     </>
 </body>
 
