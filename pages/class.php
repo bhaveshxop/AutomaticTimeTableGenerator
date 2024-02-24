@@ -5,6 +5,10 @@ include('../utils/dbcon.php');
 // Fetch departments from the database
 $departments = $conn->query("SELECT * FROM departments");
 
+// Fetch data from the assigned table
+$assignedResult = $conn->query("SELECT a.*, s.scode, s.sname, s.stype FROM assigned a
+                                JOIN subjects s ON a.sub_id = s.sub_id");
+
 // Fetch years for the selected department
 function getYears($dept_id)
 {
@@ -39,6 +43,11 @@ if (isset($_POST['save'])) {
     echo "Subject: $subject, Staff: $staff, Total Periods: $totalPeriods, Duration: $duration, Department: $dept, Year: $year, Section: $section<br>";
     $query = "INSERT INTO assigned(dept_id, year, section, sub_id, staff_short_name, duration,total_in_week) VALUES ('$dept', '$year', '$section', '$subject', '$staff', '$duration', '$totalPeriods')";
     $conn->query($query);
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+
+    echo "<script> alert('Data saved successfully!'); </script>";
+    
 }
 ?>
 
@@ -142,7 +151,20 @@ if (isset($_POST['save'])) {
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Your table rows will go here -->
+                        <?php
+                        // Display rows from the assigned table
+                        while ($row = $assignedResult->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $row['sname'] . "</td>";
+                            echo "<td>" . $row['scode'] . "</td>";
+                            echo "<td>" . $row['stype'] . "</td>";
+                            echo "<td>" . $row['staff_short_name'] . "</td>";
+                            echo "<td>" . $row['total_in_week'] . "</td>";
+                            echo "<td>" . $row['duration'] . "</td>";
+                            echo "<td><a href='#' class='btn btn-danger'>Delete</a></td>";
+                            echo "</tr>";
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
@@ -204,7 +226,7 @@ if (isset($_POST['save'])) {
                 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="save" name="save">Save</button>
+                    <button type="submit" class="btn btn-primary" id="save" name="save" onclick="saveData()">Save</button>
                 </div>
             </form>
         </div>
@@ -247,6 +269,7 @@ if (isset($_POST['save'])) {
             }
         }
 
+        // Fetch sections for the selected department using PHP
         if ($departments->num_rows > 0) {
             $departments->data_seek(0);
             while ($row = $departments->fetch_assoc()) {
@@ -261,7 +284,22 @@ if (isset($_POST['save'])) {
                 echo "}";
             }
         }
+
+
+        
         ?>
+
+        //display the record for the particular department
+        
+
+    }
+
+    function saveData() {
+        // Reset the form
+        document.getElementById('assignForm').reset();
+
+        // Hide the modal
+        $('#assignModal').modal('hide');
     }
 
     // Initialize year options on page load
