@@ -10,6 +10,8 @@ $query = "SELECT * FROM assigned";
 $result = mysqli_query($conn, $query);
 $collage_start_time = "09:00:00";
 $collage_end_time = "17:00:00";
+$recess_start_time = "13:00:00";
+$recessDuration = 1; // in hours
 
 // clear the time table
 $query = "TRUNCATE TABLE time_table";
@@ -52,7 +54,6 @@ if ($result) {
                 $lastPeriodEndTime = end($lastPeriodEndTime);
                 $lastPeriodEndTime = $lastPeriodEndTime['End_Time'];
                 echo $lastPeriodEndTime . "<br> <br>";
-
             } else {
                 $lastPeriodEndTime = $collage_start_time;
             }
@@ -62,17 +63,25 @@ if ($result) {
                 $currentTime = $lastPeriodEndTime;
             }
 
+            // check if the current time is greater than the recess start time
+            if ($currentTime >= $recess_start_time) {
+                $currentTime = date('H:i:s', strtotime($currentTime) + $recessDuration * 60 * 60);
+            }
+
             $temp = date('H:i:s', strtotime($currentTime) + $duration * 60 * 60);
 
-            $query = "INSERT INTO time_table ( day, period_id, start_time, end_time) VALUES ('$currentDay', '$period_id', '$currentTime', '$temp')";
-            $result = mysqli_query($conn, $query);
+            if ($temp < $collage_end_time) {
 
-            $currentTime = $temp;
+                $query = "INSERT INTO time_table ( day, period_id, start_time, end_time) VALUES ('$currentDay', '$period_id', '$currentTime', '$temp')";
+                $result = mysqli_query($conn, $query);
 
-            if ($result) {
-                echo "Data inserted successfully";
-            } else {
-                echo "Error: " . $query . "<br>" . mysqli_error($conn);
+                $currentTime = $temp;
+
+                if ($result) {
+                    echo "Data inserted successfully";
+                } else {
+                    echo "Error: " . $query . "<br>" . mysqli_error($conn);
+                }                
             }
 
             if ($currentDay == "Monday") {
