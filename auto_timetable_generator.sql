@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 22, 2024 at 05:37 PM
+-- Generation Time: Feb 25, 2024 at 08:34 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -46,6 +46,7 @@ INSERT INTO `admin` (`username`, `password`) VALUES
 --
 
 CREATE TABLE `assigned` (
+  `period_id` int(11) NOT NULL,
   `dept_id` int(11) DEFAULT NULL,
   `year` int(11) DEFAULT NULL,
   `section` varchar(10) DEFAULT NULL,
@@ -54,6 +55,15 @@ CREATE TABLE `assigned` (
   `duration` int(11) DEFAULT NULL,
   `total_in_week` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `assigned`
+--
+
+INSERT INTO `assigned` (`period_id`, `dept_id`, `year`, `section`, `sub_id`, `staff_short_name`, `duration`, `total_in_week`) VALUES
+(1, 27, 2, '1', 8, 'ASP', 2, 5),
+(2, 27, 3, '1', 10, 'DAC', 1, 4),
+(3, 8, 1, '1', 8, 'DAC', 2, 7);
 
 -- --------------------------------------------------------
 
@@ -119,6 +129,28 @@ INSERT INTO `subjects` (`sub_id`, `scode`, `sname`, `stype`) VALUES
 (8, 'FC0205', 'Programming in C', 'Lab'),
 (10, 'FC0205', 'Programming in C', 'Theory');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `time_table`
+--
+
+CREATE TABLE `time_table` (
+  `id` int(11) NOT NULL,
+  `day` varchar(50) NOT NULL,
+  `period_id` int(11) NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `time_table`
+--
+
+INSERT INTO `time_table` (`id`, `day`, `period_id`, `start_time`, `end_time`) VALUES
+(1, 'Monday', 1, '08:00:00', '10:00:00'),
+(3, 'Monday', 2, '08:00:00', '10:00:00');
+
 --
 -- Indexes for dumped tables
 --
@@ -127,6 +159,7 @@ INSERT INTO `subjects` (`sub_id`, `scode`, `sname`, `stype`) VALUES
 -- Indexes for table `assigned`
 --
 ALTER TABLE `assigned`
+  ADD PRIMARY KEY (`period_id`),
   ADD KEY `fk_dept` (`dept_id`),
   ADD KEY `fk_sub` (`sub_id`),
   ADD KEY `fk_staff` (`staff_short_name`);
@@ -151,8 +184,21 @@ ALTER TABLE `subjects`
   ADD UNIQUE KEY `unique_subject_type` (`scode`,`stype`);
 
 --
+-- Indexes for table `time_table`
+--
+ALTER TABLE `time_table`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_period_tt` (`period_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `assigned`
+--
+ALTER TABLE `assigned`
+  MODIFY `period_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -167,6 +213,12 @@ ALTER TABLE `subjects`
   MODIFY `sub_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `time_table`
+--
+ALTER TABLE `time_table`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -177,6 +229,12 @@ ALTER TABLE `assigned`
   ADD CONSTRAINT `fk_dept` FOREIGN KEY (`dept_id`) REFERENCES `departments` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_staff` FOREIGN KEY (`staff_short_name`) REFERENCES `staff` (`short_name`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_sub` FOREIGN KEY (`sub_id`) REFERENCES `subjects` (`sub_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `time_table`
+--
+ALTER TABLE `time_table`
+  ADD CONSTRAINT `fk_period_tt` FOREIGN KEY (`period_id`) REFERENCES `assigned` (`period_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
