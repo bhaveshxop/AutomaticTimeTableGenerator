@@ -1,3 +1,11 @@
+<?php
+    include './utils/dbcon.php';
+
+    $query = "SELECT * FROM class_list";
+
+    $result = mysqli_query($conn, $query);
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -13,8 +21,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="">
-                <img src="./Images/logo.webp"  width="34" height="36">
-
+                <img src="./Images/logo.webp" width="34" height="36">
                 TimeTable</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -45,131 +52,50 @@
         </div>
     </nav>
 
-     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 20px;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        .timetable-container {
-            max-width: 800px;
-            margin: 20px auto;
-        }
-
-        .dropdown {
-            margin-bottom: 10px;
-        }
-
-        #timetable {
-            display: none;
-            margin-top: 20px;
-        }
-
-        @media (max-width: 575.98px) {
-            .timetable-container {
-                margin: 20px 0;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <h1>Timetable Display</h1>
-
-    <div class="timetable-container">
-        <div class="dropdown">
-            <!-- Department Dropdown -->
-            <label for="department" class="form-label">Department:</label>
-            <select id="department" name="department" class="form-select">
-                <option value="dept1">Department 1</option>
-                <option value="dept2">Department 2</option>
-                <!-- Add more departments as needed -->
-            </select>
+    <div class="container mt-3">
+        <div class="head">
+            <h2>Welcome to Time Table Generator</h2>
         </div>
-
-        <div class="dropdown">
-            <!-- Year Dropdown -->
-            <label for="year" class="form-label">Year:</label>
-            <select id="year" name="year" class="form-select">
-                <option value="year1">Year 1</option>
-                <option value="year2">Year 2</option>
-                <!-- Add more years as needed -->
-            </select>
-        </div>
-
-        <div class="dropdown">
-            <!-- Section Dropdown -->
-            <label for="section" class="form-label">Section:</label>
-            <select id="section" name="section" class="form-select">
-                <option value="section1">Section A</option>
-                <option value="section2">Section B</option>
-                <!-- Add more sections as needed -->
-            </select>
-        </div>
-
-        <!-- Display Timetable Button -->
-        <button onclick="displayTimetable()" class="btn btn-primary">Display Timetable</button>
-
-        <!-- Timetable Table -->
-        <div id="timetable">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">Time</th>
-                        <th scope="col">Monday</th>
-                        <th scope="col">Tuesday</th>
-                        <th scope="col">Wednesday</th>
-                        <th scope="col">Thursday</th>
-                        <th scope="col">Friday</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Timetable rows will be dynamically added here -->
-                </tbody>
-            </table>
+        <div class="content">
+            <div class="d-flex flex-row-reverse mb-3">
+                <button type="submit" name="generate" class="btn btn-success mt-2 ">Generate Time Table</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered text-center table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sr No.</th>
+                            <th scope="col">Department name</th>
+                            <th scope="col">Year</th>
+                            <th scope="col">Section</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $i = 1;
+                        while ($row = mysqli_fetch_assoc($result)) {
+                        ?>
+                            <tr>
+                                <th scope="row"><?php echo $i; ?></th>
+                                <td><?php echo $row['Department_Name']; ?></td>
+                                <td><?php echo $row['Year']; ?></td>
+                                <td><?php echo $row['Section']; ?></td>
+                                <td>
+                                    <button type="button" name="view" class="btn btn-primary">View</button>
+                                </td>
+                            </tr>
+                        <?php
+                            $i++;
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script>
-        function displayTimetable() {
-            // You can fetch and display the timetable data here
-            // For now, let's add a sample timetable row
 
-            var timetableTable = document.querySelector('#timetable table tbody');
-
-            // Sample data (replace with actual data)
-            var timetableData = [
-                { time: '9:00 AM', mon: 'Class A', tue: 'Class B', wed: 'Class C', thu: 'Class D', fri: 'Class E' },
-                // Add more rows as needed
-            ];
-
-            // Clear existing rows
-            timetableTable.innerHTML = '';
-
-            // Add rows based on data
-            timetableData.forEach(function (row) {
-                var newRow = document.createElement('tr');
-                newRow.innerHTML = `<td>${row.time}</td>
-                                    <td>${row.mon}</td>
-                                    <td>${row.tue}</td>
-                                    <td>${row.wed}</td>
-                                    <td>${row.thu}</td>
-                                    <td>${row.fri}</td>`;
-                timetableTable.appendChild(newRow);
-            });
-
-            // Show the timetable
-            document.getElementById('timetable').style.display = 'block';
-        }
-    </script>
-
-</body>
 </body>
 
 </html>
