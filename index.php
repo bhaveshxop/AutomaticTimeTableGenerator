@@ -45,7 +45,7 @@
         </div>
     </nav>
 
-    <style>
+     <style>
         body {
             font-family: 'Arial', sans-serif;
             margin: 20px;
@@ -75,6 +75,7 @@
             }
         }
     </style>
+</head>
 
 <body>
 
@@ -168,6 +169,7 @@
         }
     </script>
 
+</body>
 </body>
 
 </html>

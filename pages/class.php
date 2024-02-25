@@ -52,6 +52,8 @@ if (isset($_POST['delete'])) {
 
 
 if (isset($_POST['save'])) {
+
+    echo"<script>alert('save button clicked');</script>";
     $subject = $_POST['subject'];
     $staff = $_POST['staff'];
     $totalPeriods = $_POST['totalPeriods'];
@@ -277,10 +279,10 @@ if (isset($_POST['save'])) {
                     </div>
                 </div>
 
-                <input type="hidden" name="dept_hidden" name="dept_hidden" value="">
-                <input type="hidden" name="year_hidden" name="year_hidden" value="">
-                <input type="hidden" name="section_hidden" name="section_hidden" value="">  
-                
+                <input type="hidden" name="dept_hidden" value="<?php echo $_POST['dept']; ?>">
+                <input type="hidden" name="year_hidden" value="<?php echo $_POST['year']; ?>">
+                <input type="hidden" name="section_hidden" value="<?php echo $_POST['section']; ?>">
+            
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" id="save" name="save" onclick="saveData()">Save</button>
@@ -348,6 +350,14 @@ if (isset($_POST['save'])) {
     {
         
     }
+    function updateHiddenFields() {
+        // Update the hidden fields with the selected department, year, and section
+        
+
+        document.getElementById('dept_hidden').value = document.getElementById('dept').value;
+        document.getElementById('year_hidden').value = document.getElementById('year').value;
+        document.getElementById('section_hidden').value = document.getElementById('section').value;
+    }
 
     function sectionChange() {
         // Get the selected department ID
@@ -364,8 +374,7 @@ if (isset($_POST['save'])) {
             
         }
         ?>
-        header("Location: " . $_SERVER['PHP_SELF']);
-        exit();
+        
     }
 
     function saveData() {
