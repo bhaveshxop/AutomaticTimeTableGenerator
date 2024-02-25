@@ -44,6 +44,130 @@
             </div>
         </div>
     </nav>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .timetable-container {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .dropdown {
+            margin-bottom: 10px;
+        }
+
+        #timetable {
+            display: none;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 575.98px) {
+            .timetable-container {
+                margin: 20px 0;
+            }
+        }
+    </style>
+
+<body>
+
+    <h1>Timetable Display</h1>
+
+    <div class="timetable-container">
+        <div class="dropdown">
+            <!-- Department Dropdown -->
+            <label for="department" class="form-label">Department:</label>
+            <select id="department" name="department" class="form-select">
+                <option value="dept1">Department 1</option>
+                <option value="dept2">Department 2</option>
+                <!-- Add more departments as needed -->
+            </select>
+        </div>
+
+        <div class="dropdown">
+            <!-- Year Dropdown -->
+            <label for="year" class="form-label">Year:</label>
+            <select id="year" name="year" class="form-select">
+                <option value="year1">Year 1</option>
+                <option value="year2">Year 2</option>
+                <!-- Add more years as needed -->
+            </select>
+        </div>
+
+        <div class="dropdown">
+            <!-- Section Dropdown -->
+            <label for="section" class="form-label">Section:</label>
+            <select id="section" name="section" class="form-select">
+                <option value="section1">Section A</option>
+                <option value="section2">Section B</option>
+                <!-- Add more sections as needed -->
+            </select>
+        </div>
+
+        <!-- Display Timetable Button -->
+        <button onclick="displayTimetable()" class="btn btn-primary">Display Timetable</button>
+
+        <!-- Timetable Table -->
+        <div id="timetable">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Time</th>
+                        <th scope="col">Monday</th>
+                        <th scope="col">Tuesday</th>
+                        <th scope="col">Wednesday</th>
+                        <th scope="col">Thursday</th>
+                        <th scope="col">Friday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Timetable rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        function displayTimetable() {
+            // You can fetch and display the timetable data here
+            // For now, let's add a sample timetable row
+
+            var timetableTable = document.querySelector('#timetable table tbody');
+
+            // Sample data (replace with actual data)
+            var timetableData = [
+                { time: '9:00 AM', mon: 'Class A', tue: 'Class B', wed: 'Class C', thu: 'Class D', fri: 'Class E' },
+                // Add more rows as needed
+            ];
+
+            // Clear existing rows
+            timetableTable.innerHTML = '';
+
+            // Add rows based on data
+            timetableData.forEach(function (row) {
+                var newRow = document.createElement('tr');
+                newRow.innerHTML = `<td>${row.time}</td>
+                                    <td>${row.mon}</td>
+                                    <td>${row.tue}</td>
+                                    <td>${row.wed}</td>
+                                    <td>${row.thu}</td>
+                                    <td>${row.fri}</td>`;
+                timetableTable.appendChild(newRow);
+            });
+
+            // Show the timetable
+            document.getElementById('timetable').style.display = 'block';
+        }
+    </script>
+
 </body>
 
 </html>

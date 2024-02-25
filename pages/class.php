@@ -5,11 +5,17 @@ include('../utils/dbcon.php');
 // Fetch departments from the database
 $departments = $conn->query("SELECT * FROM departments");
 
-// Fetch data from the assigned table
-$assignedResult = $conn->query("SELECT a.*, s.scode, s.sname, s.stype FROM assigned a
-                                JOIN subjects s ON a.sub_id = s.sub_id");
+// Fetch data from the assigned table based on department, year, and section
+if(isset($_POST['getdata'])) {
+    $dept = $_POST['dept'];
+    $year = $_POST['year'];
+    $section = $_POST['section'];
+    $assignedData = $conn->query("SELECT a.*, s.scode, s.sname, s.stype, st.staff_name FROM assigned a
+                              JOIN subjects s ON a.sub_id = s.sub_id
+                              JOIN staff st ON a.staff_short_name = st.short_name
+                              WHERE a.dept_id = $dept AND a.year = $year AND a.section = $section");
+}
 
-// Fetch years for the selected department
 function getYears($dept_id)
 {
     global $conn;
@@ -32,6 +38,19 @@ function getSections($dept_id)
     return 0;
 }
 
+if (isset($_POST['delete'])) {
+    $deletePeriodId = $_POST['delete_period_id'];
+
+    // Perform the deletion query
+    $deleteQuery = "DELETE FROM assigned WHERE period_id = '$deletePeriodId'";
+    $conn->query($deleteQuery);
+
+    // Redirect back to the same page after deletion
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+
+
 if (isset($_POST['save'])) {
     $subject = $_POST['subject'];
     $staff = $_POST['staff'];
@@ -45,9 +64,6 @@ if (isset($_POST['save'])) {
     $conn->query($query);
     header("Location: " . $_SERVER['PHP_SELF']);
     exit();
-
-    echo "<script> alert('Data saved successfully!'); </script>";
-    
 }
 ?>
 
@@ -103,71 +119,112 @@ if (isset($_POST['save'])) {
         <div class="content mt-4">
             <div class="d-flex justify-content-between mb-3">
                 <div class="d-flex  ">
-                    <div class="sel-dept">
-                        <select class="form-select form-select-sm" aria-label="Default select example" id="dept" onchange="departmentChange()" name="dept">
-                            <option selected>Select department</option>
-                            <?php
-                            if ($departments->num_rows > 0) {
-                                while ($row = $departments->fetch_assoc()) {
-                                    echo "<option value=" . $row['id'] . ">" . $row['dept_name'] . "</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
+                    
+                <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="filterForm">
+                    <!-- Your existing navbar and container -->
 
-                    <div class="sel-sem ms-3">
-                        <select class="form-select form-select-sm" aria-label="Default select example" id="year" name="year"
-                        onChange="document.getElementsByName('dept_hidden')[0].value = document.getElementById('dept').value;
-                        document.getElementsByName('year_hidden')[0].value = document.getElementById('year').value;"
-                        >
-                            <option selected>Select year</option>
-                        </select>
-                    </div>
+                    <div class="container mt-3">
+                        <!-- Your existing content -->
 
-                    <div class="sel-sec ms-3">
-                        <select class="form-select form-select-sm" aria-label="Default select example" id="section" name="section" onChange="document.getElementsByName('section_hidden')[0].value = document.getElementById('section').value;"
-                        >
-                            <option selected>Select section</option>
-                        </select>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div class="d-flex">
+                                <div class="sel-dept">
+                                    <select class="form-select form-select-sm" aria-label="Default select example" id="dept" onchange="departmentChange()" name="dept">
+                                        <option selected>Select department</option>
+                                        <?php
+                                        if ($departments->num_rows > 0) {
+                                            while ($row = $departments->fetch_assoc()) {
+                                                echo "<option value=" . $row['id'] . ">" . $row['dept_name'] . "</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="sel-sem ms-3">
+                                    <select class="form-select form-select-sm" aria-label="Default select example" id="year" name="year" onChange="updateHiddenFields()">
+                                        <option selected>Select year</option>
+                                    </select>
+                                </div>
+
+                                <div class="sel-sec ms-3">
+                                    <select class="form-select form-select-sm" aria-label="Default select example" id="section" name="section" onChange="updateHiddenFields(); sectionChange();">
+                                        <option selected>Select section</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-success ms-3" onclick="getData()" name=
+                                "getdata"> Get Data</button>
+                            </div>
+                        </div>
+                        </div>
+                        <!-- Your existing table and modal -->
+
                     </div>
-                </div>
+                </form>
                 <div>
+                    
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#assignModal">Assign</button>
                 </div>
             </div>
+                
+            <?php
+            // Display data only when getData button is clicked
+            if (isset($_POST['getdata'])) {
 
-            <div class="table-responsive">
-                <table class="table table-bordered text-center table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">Subject</th>
-                            <th scope="col">Subject code</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Staff name</th>
-                            <th scope="col">Total in week</th>
-                            <th scope="col">Duration</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        // Display rows from the assigned table
-                        while ($row = $assignedResult->fetch_assoc()) {
-                            echo "<tr>";
-                            echo "<td>" . $row['sname'] . "</td>";
-                            echo "<td>" . $row['scode'] . "</td>";
-                            echo "<td>" . $row['stype'] . "</td>";
-                            echo "<td>" . $row['staff_short_name'] . "</td>";
-                            echo "<td>" . $row['total_in_week'] . "</td>";
-                            echo "<td>" . $row['duration'] . "</td>";
-                            echo "<td><a href='#' class='btn btn-danger'>Delete</a></td>";
-                            echo "</tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
+                echo '<div class="table-responsive" id="infotable">';
+                echo '<table class="table table-bordered text-center table-hover">';
+                echo '<thead>';
+                echo '<tr>';
+                echo '<th scope="col">Subject Name</th>';
+                echo '<th scope="col">Subject Code</th>';
+                echo '<th scope="col">Subject Type</th>';
+                echo '<th scope="col">Staff Name</th>';
+                echo '<th scope="col">Total Periods in Week</th>';
+                echo '<th scope="col">Duration</th>';
+                echo '<th scope="col">Actions</th>';
+                echo '</tr>';
+                echo '</thead>';
+
+                $dept = $_POST['dept'];
+                $year = $_POST['year'];
+                $section = $_POST['section'];
+                $assignedData = $conn->query("SELECT a.*, s.scode, s.sname, s.stype, st.staff_name FROM assigned a
+                              JOIN subjects s ON a.sub_id = s.sub_id
+                              JOIN staff st ON a.staff_short_name = st.short_name
+                              WHERE a.dept_id = $dept AND a.year = $year AND a.section = $section");
+
+
+                while ($row = $assignedData->fetch_assoc()) 
+                {
+                    echo '<tbody>';
+                    echo '<tr>';
+                    echo '<td scope="row">' . $row['sname'] . '</td>';
+                    echo '<td scope="row">' . $row['scode'] . '</td>';
+                    echo '<td scope="row">' . $row['stype'] . '</td>';
+                    echo '<td scope="row">' . $row['staff_name'] . '</td>';
+                    echo '<td scope="row">' . $row['total_in_week'] . '</td>';
+                    echo '<td scope="row">' . $row['duration'] . '</td>';
+                    echo '<td>';
+                    echo '<button type="button" class="btn btn-danger btn-sm" onclick="deletePeriod(' . $row['period_id'] . ')">Delete</button>';
+                    echo '</td>';
+                    echo '</tr>';
+                    echo '</tbody>';
+                }
+                
+                echo "</table>";
+                echo "</div>";
+            
+            ?>
+               
+            <?php
+            } else {
+                // Display message if department, year, and section are not selected
+                echo '<div id="message" class="alert alert-info" role="alert">Please select department, year, and section to display data.</div>';
+            }
+            ?>
+
         </div>
     </div>
 
@@ -283,15 +340,32 @@ if (isset($_POST['save'])) {
                 }
                 echo "}";
             }
-        }
-
-
-        
+        } 
         ?>
-
-        //display the record for the particular department
         
+    }
+    function getData()
+    {
+        
+    }
 
+    function sectionChange() {
+        // Get the selected department ID
+        alert("section change");
+        var deptId = document.getElementById('dept').value;
+        var year = document.getElementById('year').value;
+        var section = document.getElementById('section').value;
+
+        // Fetch the assigned data for the selected department, year, and section using PHP
+        <?php
+        if (isset($_POST['dept']) && isset($_POST['year']) && isset($_POST['section'])) {
+            echo "document.getElementById('message').style.display = 'none';";
+            echo "document.getElementById('infotable').style.display = 'block';";
+            
+        }
+        ?>
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
     }
 
     function saveData() {
@@ -301,6 +375,31 @@ if (isset($_POST['save'])) {
         // Hide the modal
         $('#assignModal').modal('hide');
     }
+
+    function deletePeriod(periodId) {
+    if (confirm('Are you sure you want to delete this class?')) {
+        // If user confirms, submit the form with the period ID
+        var form = document.createElement('form');
+        form.method = 'post';
+        form.action = '';
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'delete';
+        input.value = true; // You can use any value here to indicate delete
+        form.appendChild(input);
+
+        // Add hidden input for period ID
+        var periodIdInput = document.createElement('input');
+        periodIdInput.type = 'hidden';
+        periodIdInput.name = 'delete_period_id';
+        periodIdInput.value = periodId;
+        form.appendChild(periodIdInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
 
     // Initialize year options on page load
     window.onload = function () {
