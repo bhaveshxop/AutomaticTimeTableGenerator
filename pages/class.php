@@ -53,7 +53,7 @@ if (isset($_POST['delete'])) {
 
 if (isset($_POST['save'])) {
 
-    echo"<script>alert('save button clicked');</script>";
+    
     $subject = $_POST['subject'];
     $staff = $_POST['staff'];
     $totalPeriods = $_POST['totalPeriods'];
@@ -80,6 +80,7 @@ if (isset($_POST['save'])) {
         crossorigin="anonymous">
 
     <title>Class Information</title>
+    <link rel="icon" href="../Images/logo.webp" type="image/x-icon">
 </head>
 
 <body>
@@ -87,7 +88,7 @@ if (isset($_POST['save'])) {
         <div class="container-fluid">
             <a class="navbar-brand" href="../">
                 <img src="../Images/logo.webp" width="34" height="36">
-                TimeTable</a>
+                TimeTable Generator</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -383,6 +384,8 @@ if (isset($_POST['save'])) {
 
         // Hide the modal
         $('#assignModal').modal('hide');
+
+        alert('Data saved successfully!');
     }
 
     function deletePeriod(periodId) {
