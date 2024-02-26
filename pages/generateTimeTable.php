@@ -10,6 +10,8 @@ $query = "SELECT * FROM assigned";
 $result = mysqli_query($conn, $query);
 $collage_start_time = "09:00:00";
 $collage_end_time = "17:00:00";
+// total number of hours college is open * total days in a week
+$MAX_ITERATION = 8 * 6;
 $recess_start_time = "13:00:00";
 $recessDuration = 1; // in hours
 
@@ -17,7 +19,6 @@ $recessDuration = 1; // in hours
 $query = "TRUNCATE TABLE time_table";
 
 if ($conn->query($query) === TRUE) {
-    echo "Record deleted successfully";
 } else {
     echo "Error deleting record: " . $conn->error;
 }
@@ -39,9 +40,20 @@ if ($result) {
         $staff_short_name = $assign['staff_short_name'];
         $duration = $assign['duration'];
         $total_in_week = $assign['total_in_week'];
+        $count = 0;
 
         while ($total_in_week > 0) {
-            $total_in_week--;
+            $count++;
+            if ($count > $MAX_ITERATION) {
+                echo "Time table can't be generated for the given data, " . $total_in_week . " periods are remaining for " . $sub_id . " " . $staff_short_name . " " . $year . " " . $section . " " . $dept_id;
+                // clear the time table
+                $query = "TRUNCATE TABLE time_table";
+                if ($conn->query($query) === TRUE) {
+                } else {
+                    echo "Error deleting record: " . $conn->error;
+                }
+                break;
+            }
 
             $query = "SELECT * FROM timetable_view WHERE day = '$currentDay' AND year = '$year' AND section = '$section' AND Department_ID = '$dept_id'";
 
@@ -53,7 +65,6 @@ if ($result) {
                 $lastPeriodEndTime = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 $lastPeriodEndTime = end($lastPeriodEndTime);
                 $lastPeriodEndTime = $lastPeriodEndTime['End_Time'];
-                echo $lastPeriodEndTime . "<br> <br>";
             } else {
                 $lastPeriodEndTime = $collage_start_time;
             }
@@ -63,25 +74,31 @@ if ($result) {
                 $currentTime = $lastPeriodEndTime;
             }
 
-            // check if the current time is greater than the recess start time
-            if ($currentTime >= $recess_start_time) {
-                $currentTime = date('H:i:s', strtotime($currentTime) + $recessDuration * 60 * 60);
+            // check if the recess is already in the time table for the that class
+            $query = "SELECT * FROM timetable_view WHERE day = '$currentDay' AND year = '$year' AND section = '$section' AND Department_ID = '$dept_id' AND recess = 1";
+            $result = mysqli_query($conn, $query);
+
+            if ($result && mysqli_num_rows($result) == 0 && $currentTime >= $recess_start_time) {
+                // add reccess into the time table
+                $temp = date('H:i:s', strtotime($currentTime) + $recessDuration * 60 * 60);
+                $query = "INSERT INTO time_table ( day, period_id, start_time, end_time, recess) VALUES ('$currentDay', '$period_id', '$currentTime', '$temp', 1)";
+                $result = mysqli_query($conn, $query);
+                $currentTime = $temp;
             }
 
             $temp = date('H:i:s', strtotime($currentTime) + $duration * 60 * 60);
 
             if ($temp < $collage_end_time) {
-
                 $query = "INSERT INTO time_table ( day, period_id, start_time, end_time) VALUES ('$currentDay', '$period_id', '$currentTime', '$temp')";
                 $result = mysqli_query($conn, $query);
+                $total_in_week--;
 
                 $currentTime = $temp;
 
                 if ($result) {
-                    echo "Data inserted successfully";
                 } else {
                     echo "Error: " . $query . "<br>" . mysqli_error($conn);
-                }                
+                }
             }
 
             if ($currentDay == "Monday") {
@@ -105,6 +122,11 @@ if ($result) {
             }
         }
     }
+    echo "Time table generated successfully";
+    // go back to the home page button
+    echo "<br><a href='../' class='btn btn-primary'>Go back to the home page</a>";
+} else {
+    echo "Error: " . $query . "<br>" . mysqli_error($conn);
 }
 ?>
 <!DOCTYPE html>
@@ -118,17 +140,6 @@ if ($result) {
 </head>
 
 <body>
-    <?php foreach ($assigned as $assign) : ?>
-        <p><?php echo $assign['period_id'] ?></p>
-        <p><?php echo $assign['dept_id'] ?></p>
-        <p><?php echo $assign['year'] ?></p>
-        <p><?php echo $assign['section'] ?></p>
-        <p><?php echo $assign['sub_id'] ?></p>
-        <p><?php echo $assign['staff_short_name'] ?></p>
-        <p><?php echo $assign['duration'] ?></p>
-        <p><?php echo $assign['total_in_week'] ?></p>
-    <?php endforeach; ?>
-
 </body>
 
 </html>
