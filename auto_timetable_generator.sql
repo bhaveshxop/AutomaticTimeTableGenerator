@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 26, 2024 at 08:13 AM
+-- Generation Time: Feb 26, 2024 at 08:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -75,8 +75,11 @@ INSERT INTO `assigned` (`period_id`, `dept_id`, `year`, `section`, `sub_id`, `st
 (30, 8, 3, '1', 16, 'DAC', 1, 4),
 (31, 8, 3, '2', 18, 'SNP', 1, 4),
 (32, 8, 3, '2', 17, 'HSB', 2, 2),
-(33, 2, 1, '1', 10, 'ASP', 2, 56),
-(34, 8, 1, '1', 17, 'HSB', 1, 100);
+(35, 27, 1, '1', 10, 'ABD', 1, 4),
+(38, 27, 1, '1', 18, 'BNP', 1, 6),
+(39, 27, 1, '1', 17, 'SNP', 2, 7),
+(40, 27, 1, '1', 14, 'DAC', 1, 4),
+(41, 27, 1, '1', 16, 'ASP', 1, 6);
 
 -- --------------------------------------------------------
 
@@ -187,6 +190,7 @@ CREATE TABLE `timetable_view` (
 ,`Subject_Name` varchar(255)
 ,`Staff_Short_Name` varchar(10)
 ,`Staff_Name` varchar(255)
+,`recess` int(11)
 );
 
 -- --------------------------------------------------------
@@ -200,101 +204,99 @@ CREATE TABLE `time_table` (
   `day` varchar(50) NOT NULL,
   `period_id` int(11) NOT NULL,
   `start_time` time NOT NULL,
-  `end_time` time NOT NULL
+  `end_time` time NOT NULL,
+  `recess` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `time_table`
 --
 
-INSERT INTO `time_table` (`id`, `day`, `period_id`, `start_time`, `end_time`) VALUES
-(1, 'Monday', 19, '09:00:00', '10:00:00'),
-(2, 'Tuesday', 19, '09:00:00', '10:00:00'),
-(3, 'Wednesday', 19, '09:00:00', '10:00:00'),
-(4, 'Thursday', 20, '09:00:00', '10:00:00'),
-(5, 'Friday', 20, '09:00:00', '10:00:00'),
-(6, 'Saturday', 20, '09:00:00', '10:00:00'),
-(7, 'Monday', 21, '09:00:00', '11:00:00'),
-(8, 'Tuesday', 21, '09:00:00', '11:00:00'),
-(9, 'Wednesday', 21, '09:00:00', '11:00:00'),
-(10, 'Thursday', 21, '09:00:00', '11:00:00'),
-(11, 'Friday', 21, '09:00:00', '11:00:00'),
-(12, 'Saturday', 21, '09:00:00', '11:00:00'),
-(13, 'Monday', 22, '09:00:00', '11:00:00'),
-(14, 'Tuesday', 22, '09:00:00', '11:00:00'),
-(15, 'Wednesday', 22, '09:00:00', '11:00:00'),
-(16, 'Thursday', 22, '09:00:00', '11:00:00'),
-(17, 'Friday', 22, '09:00:00', '11:00:00'),
-(18, 'Saturday', 23, '09:00:00', '11:00:00'),
-(19, 'Monday', 23, '11:00:00', '13:00:00'),
-(20, 'Tuesday', 23, '11:00:00', '13:00:00'),
-(21, 'Wednesday', 23, '11:00:00', '13:00:00'),
-(22, 'Thursday', 23, '11:00:00', '13:00:00'),
-(23, 'Friday', 24, '09:00:00', '10:00:00'),
-(24, 'Saturday', 24, '09:00:00', '10:00:00'),
-(25, 'Monday', 24, '09:00:00', '10:00:00'),
-(26, 'Tuesday', 25, '09:00:00', '11:00:00'),
-(27, 'Wednesday', 25, '09:00:00', '11:00:00'),
-(28, 'Thursday', 25, '09:00:00', '11:00:00'),
-(29, 'Friday', 25, '09:00:00', '11:00:00'),
-(30, 'Saturday', 26, '10:00:00', '11:00:00'),
-(31, 'Monday', 26, '10:00:00', '11:00:00'),
-(32, 'Tuesday', 26, '09:00:00', '10:00:00'),
-(33, 'Wednesday', 27, '09:00:00', '11:00:00'),
-(34, 'Thursday', 27, '09:00:00', '11:00:00'),
-(35, 'Friday', 28, '09:00:00', '11:00:00'),
-(36, 'Saturday', 28, '09:00:00', '11:00:00'),
-(37, 'Monday', 28, '09:00:00', '11:00:00'),
-(38, 'Tuesday', 29, '09:00:00', '10:00:00'),
-(39, 'Wednesday', 29, '11:00:00', '12:00:00'),
-(40, 'Thursday', 29, '11:00:00', '12:00:00'),
-(41, 'Friday', 29, '09:00:00', '10:00:00'),
-(42, 'Saturday', 30, '09:00:00', '10:00:00'),
-(43, 'Monday', 30, '09:00:00', '10:00:00'),
-(44, 'Tuesday', 30, '10:00:00', '11:00:00'),
-(45, 'Wednesday', 30, '12:00:00', '13:00:00'),
-(46, 'Thursday', 31, '09:00:00', '10:00:00'),
-(47, 'Friday', 31, '09:00:00', '10:00:00'),
-(48, 'Saturday', 31, '09:00:00', '10:00:00'),
-(49, 'Monday', 31, '09:00:00', '10:00:00'),
-(50, 'Tuesday', 32, '09:00:00', '11:00:00'),
-(51, 'Wednesday', 32, '09:00:00', '11:00:00'),
-(52, 'Thursday', 33, '10:00:00', '12:00:00'),
-(53, 'Friday', 33, '10:00:00', '12:00:00'),
-(54, 'Saturday', 33, '10:00:00', '12:00:00'),
-(55, 'Monday', 33, '10:00:00', '12:00:00'),
-(56, 'Tuesday', 33, '10:00:00', '12:00:00'),
-(57, 'Wednesday', 33, '10:00:00', '12:00:00'),
-(58, 'Thursday', 33, '12:00:00', '14:00:00'),
-(59, 'Friday', 33, '12:00:00', '14:00:00'),
-(60, 'Saturday', 33, '12:00:00', '14:00:00'),
-(61, 'Monday', 33, '12:00:00', '14:00:00'),
-(62, 'Tuesday', 33, '12:00:00', '14:00:00'),
-(63, 'Wednesday', 33, '12:00:00', '14:00:00'),
-(64, 'Saturday', 34, '11:00:00', '12:00:00'),
-(65, 'Monday', 34, '11:00:00', '12:00:00'),
-(66, 'Tuesday', 34, '10:00:00', '11:00:00'),
-(67, 'Wednesday', 34, '09:00:00', '10:00:00'),
-(68, 'Thursday', 34, '09:00:00', '10:00:00'),
-(69, 'Friday', 34, '10:00:00', '11:00:00'),
-(70, 'Saturday', 34, '12:00:00', '13:00:00'),
-(71, 'Monday', 34, '12:00:00', '13:00:00'),
-(72, 'Tuesday', 34, '11:00:00', '12:00:00'),
-(73, 'Wednesday', 34, '10:00:00', '11:00:00'),
-(74, 'Thursday', 34, '10:00:00', '11:00:00'),
-(75, 'Friday', 34, '11:00:00', '12:00:00'),
-(76, 'Saturday', 34, '14:00:00', '15:00:00'),
-(77, 'Monday', 34, '14:00:00', '15:00:00'),
-(78, 'Tuesday', 34, '12:00:00', '13:00:00'),
-(79, 'Wednesday', 34, '11:00:00', '12:00:00'),
-(80, 'Thursday', 34, '11:00:00', '12:00:00'),
-(81, 'Friday', 34, '12:00:00', '13:00:00'),
-(82, 'Tuesday', 34, '14:00:00', '15:00:00'),
-(83, 'Wednesday', 34, '12:00:00', '13:00:00'),
-(84, 'Thursday', 34, '12:00:00', '13:00:00'),
-(85, 'Friday', 34, '14:00:00', '15:00:00'),
-(86, 'Wednesday', 34, '14:00:00', '15:00:00'),
-(87, 'Thursday', 34, '14:00:00', '15:00:00');
+INSERT INTO `time_table` (`id`, `day`, `period_id`, `start_time`, `end_time`, `recess`) VALUES
+(1, 'Monday', 19, '09:00:00', '10:00:00', 0),
+(2, 'Tuesday', 19, '09:00:00', '10:00:00', 0),
+(3, 'Wednesday', 19, '09:00:00', '10:00:00', 0),
+(4, 'Thursday', 20, '09:00:00', '10:00:00', 0),
+(5, 'Friday', 20, '09:00:00', '10:00:00', 0),
+(6, 'Saturday', 20, '09:00:00', '10:00:00', 0),
+(7, 'Monday', 21, '09:00:00', '11:00:00', 0),
+(8, 'Tuesday', 21, '09:00:00', '11:00:00', 0),
+(9, 'Wednesday', 21, '09:00:00', '11:00:00', 0),
+(10, 'Thursday', 21, '09:00:00', '11:00:00', 0),
+(11, 'Friday', 21, '09:00:00', '11:00:00', 0),
+(12, 'Saturday', 21, '09:00:00', '11:00:00', 0),
+(13, 'Monday', 22, '09:00:00', '11:00:00', 0),
+(14, 'Tuesday', 22, '09:00:00', '11:00:00', 0),
+(15, 'Wednesday', 22, '09:00:00', '11:00:00', 0),
+(16, 'Thursday', 22, '09:00:00', '11:00:00', 0),
+(17, 'Friday', 22, '09:00:00', '11:00:00', 0),
+(18, 'Saturday', 23, '09:00:00', '11:00:00', 0),
+(19, 'Monday', 23, '11:00:00', '13:00:00', 0),
+(20, 'Tuesday', 23, '11:00:00', '13:00:00', 0),
+(21, 'Wednesday', 23, '11:00:00', '13:00:00', 0),
+(22, 'Thursday', 23, '11:00:00', '13:00:00', 0),
+(23, 'Friday', 24, '09:00:00', '10:00:00', 0),
+(24, 'Saturday', 24, '09:00:00', '10:00:00', 0),
+(25, 'Monday', 24, '09:00:00', '10:00:00', 0),
+(26, 'Tuesday', 25, '09:00:00', '11:00:00', 0),
+(27, 'Wednesday', 25, '09:00:00', '11:00:00', 0),
+(28, 'Thursday', 25, '09:00:00', '11:00:00', 0),
+(29, 'Friday', 25, '09:00:00', '11:00:00', 0),
+(30, 'Saturday', 26, '10:00:00', '11:00:00', 0),
+(31, 'Monday', 26, '10:00:00', '11:00:00', 0),
+(32, 'Tuesday', 26, '09:00:00', '10:00:00', 0),
+(33, 'Wednesday', 27, '09:00:00', '11:00:00', 0),
+(34, 'Thursday', 27, '09:00:00', '11:00:00', 0),
+(35, 'Friday', 28, '09:00:00', '11:00:00', 0),
+(36, 'Saturday', 28, '09:00:00', '11:00:00', 0),
+(37, 'Monday', 28, '09:00:00', '11:00:00', 0),
+(38, 'Tuesday', 29, '09:00:00', '10:00:00', 0),
+(39, 'Wednesday', 29, '11:00:00', '12:00:00', 0),
+(40, 'Thursday', 29, '11:00:00', '12:00:00', 0),
+(41, 'Friday', 29, '09:00:00', '10:00:00', 0),
+(42, 'Saturday', 30, '09:00:00', '10:00:00', 0),
+(43, 'Monday', 30, '09:00:00', '10:00:00', 0),
+(44, 'Tuesday', 30, '10:00:00', '11:00:00', 0),
+(45, 'Wednesday', 30, '12:00:00', '13:00:00', 0),
+(46, 'Thursday', 31, '09:00:00', '10:00:00', 0),
+(47, 'Friday', 31, '09:00:00', '10:00:00', 0),
+(48, 'Saturday', 31, '09:00:00', '10:00:00', 0),
+(49, 'Monday', 31, '09:00:00', '10:00:00', 0),
+(50, 'Tuesday', 32, '09:00:00', '11:00:00', 0),
+(51, 'Wednesday', 32, '09:00:00', '11:00:00', 0),
+(52, 'Thursday', 35, '09:00:00', '10:00:00', 0),
+(53, 'Friday', 35, '09:00:00', '10:00:00', 0),
+(54, 'Saturday', 35, '09:00:00', '10:00:00', 0),
+(55, 'Monday', 35, '09:00:00', '10:00:00', 0),
+(56, 'Tuesday', 38, '09:00:00', '10:00:00', 0),
+(57, 'Wednesday', 38, '09:00:00', '10:00:00', 0),
+(58, 'Thursday', 38, '10:00:00', '11:00:00', 0),
+(59, 'Friday', 38, '10:00:00', '11:00:00', 0),
+(60, 'Saturday', 38, '10:00:00', '11:00:00', 0),
+(61, 'Monday', 38, '10:00:00', '11:00:00', 0),
+(62, 'Tuesday', 39, '10:00:00', '12:00:00', 0),
+(63, 'Wednesday', 39, '10:00:00', '12:00:00', 0),
+(64, 'Thursday', 39, '11:00:00', '13:00:00', 0),
+(65, 'Friday', 39, '11:00:00', '13:00:00', 0),
+(66, 'Saturday', 39, '11:00:00', '13:00:00', 0),
+(67, 'Monday', 39, '11:00:00', '13:00:00', 0),
+(68, 'Tuesday', 39, '12:00:00', '14:00:00', 0),
+(69, 'Wednesday', 40, '12:00:00', '13:00:00', 0),
+(70, 'Thursday', 40, '13:00:00', '14:00:00', 1),
+(71, 'Thursday', 40, '14:00:00', '15:00:00', 0),
+(72, 'Friday', 40, '13:00:00', '14:00:00', 1),
+(73, 'Friday', 40, '14:00:00', '15:00:00', 0),
+(74, 'Saturday', 40, '13:00:00', '14:00:00', 1),
+(75, 'Saturday', 40, '14:00:00', '15:00:00', 0),
+(76, 'Monday', 41, '13:00:00', '14:00:00', 1),
+(77, 'Monday', 41, '14:00:00', '15:00:00', 0),
+(78, 'Tuesday', 41, '14:00:00', '15:00:00', 1),
+(79, 'Tuesday', 41, '15:00:00', '16:00:00', 0),
+(80, 'Wednesday', 41, '13:00:00', '14:00:00', 1),
+(81, 'Wednesday', 41, '14:00:00', '15:00:00', 0),
+(82, 'Thursday', 41, '15:00:00', '16:00:00', 0),
+(83, 'Friday', 41, '15:00:00', '16:00:00', 0),
+(84, 'Saturday', 41, '15:00:00', '16:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -312,7 +314,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `timetable_view`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `timetable_view`  AS SELECT `tt`.`day` AS `Day`, `tt`.`start_time` AS `Start_Time`, `tt`.`end_time` AS `End_Time`, `d`.`id` AS `Department_ID`, `d`.`dept_name` AS `Department_Name`, `a`.`year` AS `Year`, `a`.`section` AS `Section`, `s`.`sub_id` AS `Subject_ID`, `s`.`scode` AS `Subject_Code`, `s`.`sname` AS `Subject_Name`, `st`.`short_name` AS `Staff_Short_Name`, `st`.`staff_name` AS `Staff_Name` FROM ((((`time_table` `tt` join `assigned` `a` on(`tt`.`period_id` = `a`.`period_id`)) join `subjects` `s` on(`a`.`sub_id` = `s`.`sub_id`)) join `staff` `st` on(`a`.`staff_short_name` = `st`.`short_name`)) join `departments` `d` on(`a`.`dept_id` = `d`.`id`)) ORDER BY field(`tt`.`day`,'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday') ASC, `tt`.`start_time` ASC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `timetable_view`  AS SELECT `tt`.`day` AS `Day`, `tt`.`start_time` AS `Start_Time`, `tt`.`end_time` AS `End_Time`, `d`.`id` AS `Department_ID`, `d`.`dept_name` AS `Department_Name`, `a`.`year` AS `Year`, `a`.`section` AS `Section`, `s`.`sub_id` AS `Subject_ID`, `s`.`scode` AS `Subject_Code`, `s`.`sname` AS `Subject_Name`, `st`.`short_name` AS `Staff_Short_Name`, `st`.`staff_name` AS `Staff_Name`, `tt`.`recess` AS `recess` FROM ((((`time_table` `tt` join `assigned` `a` on(`tt`.`period_id` = `a`.`period_id`)) join `subjects` `s` on(`a`.`sub_id` = `s`.`sub_id`)) join `staff` `st` on(`a`.`staff_short_name` = `st`.`short_name`)) join `departments` `d` on(`a`.`dept_id` = `d`.`id`)) ORDER BY field(`tt`.`day`,'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday') ASC, `tt`.`start_time` ASC ;
 
 --
 -- Indexes for dumped tables
@@ -361,7 +363,7 @@ ALTER TABLE `time_table`
 -- AUTO_INCREMENT for table `assigned`
 --
 ALTER TABLE `assigned`
-  MODIFY `period_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `period_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -379,7 +381,7 @@ ALTER TABLE `subjects`
 -- AUTO_INCREMENT for table `time_table`
 --
 ALTER TABLE `time_table`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- Constraints for dumped tables

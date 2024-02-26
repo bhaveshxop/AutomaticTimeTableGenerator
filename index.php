@@ -58,7 +58,7 @@ $result = mysqli_query($conn, $query);
         </div>
         <div class="content">
             <div class="d-flex flex-row-reverse mb-3">
-                <button type="submit" name="generate" class="btn btn-success mt-2 ">Generate Time Table</button>
+                <a href="./pages/generateTimeTable.php" name="generate" class="btn btn-success mt-2 ">Generate Time Table</a>
             </div>
             <div class="table-responsive">
                 <table class="table table-bordered text-center table-hover">
