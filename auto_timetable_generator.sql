@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 25, 2024 at 11:06 PM
+-- Generation Time: Feb 26, 2024 at 08:13 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.1.25
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -86,6 +86,8 @@ INSERT INTO `assigned` (`period_id`, `dept_id`, `year`, `section`, `sub_id`, `st
 --
 CREATE TABLE `class_list` (
 `Department_Name` varchar(255)
+,`Department_ID` int(11)
+,`section_no` varchar(10)
 ,`Year` int(11)
 ,`Section` varchar(10)
 );
@@ -301,7 +303,7 @@ INSERT INTO `time_table` (`id`, `day`, `period_id`, `start_time`, `end_time`) VA
 --
 DROP TABLE IF EXISTS `class_list`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `class_list`  AS SELECT DISTINCT `timetable_view`.`Department_Name` AS `Department_Name`, `timetable_view`.`Year` AS `Year`, CASE WHEN `timetable_view`.`Section` = 1 THEN 'A' WHEN `timetable_view`.`Section` = 2 THEN 'B' WHEN `timetable_view`.`Section` = 3 THEN 'C' WHEN `timetable_view`.`Section` = 4 THEN 'D' WHEN `timetable_view`.`Section` = 5 THEN 'E' WHEN `timetable_view`.`Section` = 6 THEN 'F' WHEN `timetable_view`.`Section` = 7 THEN 'G' WHEN `timetable_view`.`Section` = 8 THEN 'H' WHEN `timetable_view`.`Section` = 9 THEN 'I' WHEN `timetable_view`.`Section` = 10 THEN 'J' WHEN `timetable_view`.`Section` = 11 THEN 'K' ELSE `timetable_view`.`Section` END AS `Section` FROM `timetable_view` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `class_list`  AS SELECT DISTINCT `timetable_view`.`Department_Name` AS `Department_Name`, `timetable_view`.`Department_ID` AS `Department_ID`, `timetable_view`.`Section` AS `section_no`, `timetable_view`.`Year` AS `Year`, CASE WHEN `timetable_view`.`Section` = 1 THEN 'A' WHEN `timetable_view`.`Section` = 2 THEN 'B' WHEN `timetable_view`.`Section` = 3 THEN 'C' WHEN `timetable_view`.`Section` = 4 THEN 'D' WHEN `timetable_view`.`Section` = 5 THEN 'E' WHEN `timetable_view`.`Section` = 6 THEN 'F' WHEN `timetable_view`.`Section` = 7 THEN 'G' WHEN `timetable_view`.`Section` = 8 THEN 'H' WHEN `timetable_view`.`Section` = 9 THEN 'I' WHEN `timetable_view`.`Section` = 10 THEN 'J' WHEN `timetable_view`.`Section` = 11 THEN 'K' ELSE `timetable_view`.`Section` END AS `Section` FROM `timetable_view` ;
 
 -- --------------------------------------------------------
 
