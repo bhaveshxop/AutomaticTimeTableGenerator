@@ -1,9 +1,9 @@
 <?php
-    include './utils/dbcon.php';
+include './utils/dbcon.php';
 
-    $query = "SELECT * FROM class_list";
+$query = "SELECT * FROM class_list";
 
-    $result = mysqli_query($conn, $query);
+$result = mysqli_query($conn, $query);
 ?>
 
 <!doctype html>
@@ -77,13 +77,18 @@
                         while ($row = mysqli_fetch_assoc($result)) {
                         ?>
                             <tr>
-                                <th scope="row"><?php echo $i; ?></th>
-                                <td><?php echo $row['Department_Name']; ?></td>
-                                <td><?php echo $row['Year']; ?></td>
-                                <td><?php echo $row['Section']; ?></td>
-                                <td>
-                                    <button type="button" name="view" class="btn btn-primary">View</button>
-                                </td>
+                                <form  method="post"  action="./pages/timetable.php">
+                                    <input type="hidden" name="department_id" value="<?php echo $row['Department_ID']; ?>">
+                                    <input type="hidden" name="year" value="<?php echo $row['Year']; ?>">
+                                    <input type="hidden" name="section" value="<?php echo $row['section_no']; ?>">
+                                    <th scope="row"><?php echo $i; ?></th>
+                                    <td><?php echo $row['Department_Name']; ?></td>
+                                    <td><?php echo $row['Year']; ?></td>
+                                    <td><?php echo $row['Section']; ?></td>
+                                    <td>
+                                        <button type="submit" name="view" class="btn btn-primary">View</button>
+                                    </td>
+                                </form>
                             </tr>
                         <?php
                             $i++;
