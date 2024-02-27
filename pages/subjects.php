@@ -2,6 +2,12 @@
 // Include the database connection file
 include('../utils/dbcon.php');
 
+session_start();
+if (!isset($_SESSION['id'])) {
+    header('location: ./login.php');
+}
+
+
 
 // Function to add a subject to the database
 function addSubject($conn, $scode, $sname, $stype)
@@ -56,38 +62,41 @@ $result = mysqli_query($conn, $query);
 </head>
 
 <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="../">
-                    <img src="../Images/logo.webp" width="34" height="36">
-                    TimeTable Generator</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="../">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./department.php">Departments</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./class.php">Classes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="./staff.php">Staff</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="./subjects.php">Subjects</a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link" href="./aboutUs.php">About us</a>
-                        </li>
-                    </ul>
-                </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../">
+                <img src="../Images/logo.webp" width="34" height="36">
+                TimeTable Generator</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="../">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./department.php">Departments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./class.php">Classes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="./staff.php">Staff</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="./subjects.php">Subjects</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="./aboutUs.php">About us</a>
+                    </li>
+                </ul>
             </div>
-        </nav>
+            <div class="d-flex">
+                <a href="./logout.php" class="btn btn-danger" onclick="return confirm('Are you sure you want to logout?')">Logout</a>
+            </div>
+        </div>
+    </nav>
 
     <div class="container mt-3">
         <div class="head row">
@@ -171,4 +180,3 @@ $result = mysqli_query($conn, $query);
 </body>
 
 </html>
-

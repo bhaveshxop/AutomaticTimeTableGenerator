@@ -2,6 +2,12 @@
 // Include the database connection file
 include('../utils/dbcon.php');
 
+session_start();
+if (!isset($_SESSION['id'])) {
+    header('location: ./login.php');
+}
+
+
 // Function to add a department to the database
 function addDepartment($conn, $deptName, $dCode, $year, $sections)
 {
@@ -89,6 +95,9 @@ $result = mysqli_query($conn, $query);
                     </li>
                 </ul>
             </div>
+            <div class="d-flex">
+                <a href="./logout.php" class="btn btn-danger" onclick="return confirm('Are you sure you want to logout?')">Logout</a>
+            </div>
         </div>
     </nav>
 
@@ -103,7 +112,7 @@ $result = mysqli_query($conn, $query);
                     <input type="text" name="departmentCode" class="form-control col me-2 mt-2" placeholder="Department code">
                     <input type="text" name="year" class="form-control col me-2 mt-2" placeholder="Total Years">
                     <input type="text" name="section" class="form-control col  me-2 mt-2" placeholder="Section">
-    
+
                     <button type="submit" name="addDepartment" class="btn col btn-success mt-2 ">Add Department</button>
                 </div>
             </form>

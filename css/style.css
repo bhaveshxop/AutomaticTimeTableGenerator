@@ -1,13 +1,9 @@
-.navbar a{
+.navbar li a{
     margin-left: 15px;
-    font-size: 20px;
-    transition: 0.1s ease-out;
-    ;
+    font-size: 18px;
+    transition: 0.3s all;
 }
 
-.navbar a:hover{
-    font-weight: bold;
-}
 .navbar {
     font-size: 90px;
 }

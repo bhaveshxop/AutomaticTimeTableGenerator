@@ -1,5 +1,12 @@
 <?php
 include('../utils/dbcon.php');
+
+session_start();
+if (!isset($_SESSION['id'])) {
+    header('location: ./login.php');
+}
+
+
 $department_id = $_POST['department_id'];
 $year = $_POST['year'];
 $section = $_POST['section'];
