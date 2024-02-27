@@ -69,7 +69,7 @@ $result = mysqli_query($conn, $query);
 
     <div class="container mt-3">
         <div class="head">
-            <h2>Welcome to Time Table Generator</h2>
+            <h2>Welcome, <?php echo $_SESSION['name']; ?></h2>
         </div>
         <div class="content">
             <div class="d-flex flex-row-reverse mb-3">
