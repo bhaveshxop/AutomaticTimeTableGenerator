@@ -102,13 +102,13 @@ if (isset($_POST['save'])) {
                             <a class="nav-link" href="./department.php">Departments</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./class.php">Classes</a>
+                            <a class="nav-link active" href="./class.php">Classes</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="./staff.php">Staff</a>
+                            <a class="nav-link " href="./staff.php">Staff</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./subjects.php">Subjects</a>
+                            <a class="nav-link " href="./subjects.php">Subjects</a>
                         </li>
                         <li class="nav-item ">
                             <a class="nav-link" href="./aboutUs.php">About us</a>

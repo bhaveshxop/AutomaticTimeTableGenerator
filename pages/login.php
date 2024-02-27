@@ -13,7 +13,8 @@ if (isset($_POST['login'])) {
     $result = mysqli_query($conn, $sql);
 
     // If the user exists
-    if (mysqli_num_rows($result) > 0) {
+    if (mysqli_num_rows($result) > 0) 
+    {
         // Fetch the user data
         $user = mysqli_fetch_assoc($result);
 

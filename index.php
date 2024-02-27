@@ -34,7 +34,7 @@ $result = mysqli_query($conn, $query);
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="./">Home</a>
+                            <a class="nav-link active" aria-current="page" href="./">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="./pages/department.php">Departments</a>
@@ -43,7 +43,7 @@ $result = mysqli_query($conn, $query);
                             <a class="nav-link" href="./pages/class.php">Classes</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">Staff</a>
+                            <a class="nav-link " href="#">Staff</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="./pages/subjects.php">Subjects</a>

@@ -124,8 +124,6 @@
                                 echo '<td scope="row">' . $row['staff_name'] . '</td>';
                                 echo '<td scope="row">' . $row['short_name'] . '</td>';
                                 echo '<td>';
-                                echo '<button type="button" class="btn btn-primary btn-sm" onclick="openUpdateModal(\'' . $row['staff_name'] . '\', \'' . $row['short_name'] . '\')">Update</button>';
-                                echo ' ';
                                 echo '<button type="button" class="btn btn-danger btn-sm" onclick="deleteStaff(\'' . $row['short_name'] . '\')">Delete</button>';
                                 echo '</td>';
                                 echo '</tr>';

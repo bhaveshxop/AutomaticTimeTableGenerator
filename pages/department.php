@@ -131,8 +131,6 @@ $result = mysqli_query($conn, $query);
                             echo '<td scope="row">' . $row['year'] . '</td>';
                             echo '<td scope="row">' . $row['sections'] . '</td>';
                             echo '<td>';
-                            echo '<button type="button" class="btn btn-primary btn-sm">View</button>';
-                            echo ' ';
                             echo '<button type="button" class="btn btn-danger btn-sm" onclick="deleteDepartment(' . $row['id'] . ')">Delete</button>';
                             echo '</td>';
                             echo '</tr>';
