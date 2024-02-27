@@ -2,23 +2,23 @@
 // Array of developers with their names and photos
 $developers = [
     [
-        'name' => 'John Doe',
+        'name' => 'Mrunali Sonawane',
         'photo' => '../Images/ms.jpg',
     ],
     [
-        'name' => 'Jane Smith',
+        'name' => 'Varsha Patil',
         'photo' => '../Images/vp.jpg',
     ],
     [
-        'name' => 'Mike Johnson',
+        'name' => 'Sushma Patil',
         'photo' => '../Images/sp.jpg',
     ],
     [
-        'name' => 'Sarah Williams',
+        'name' => 'Rajshri Pawar',
         'photo' => '../Images/rp.jpg',
     ],
     [
-        'name' => 'David Brown',
+        'name' => 'Ashwini Rajput',
         'photo' => '../Images/ar.jpg',
     ],
 ];
@@ -33,6 +33,39 @@ $developers = [
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="icon" href="../Images/logo.webp" type="image/x-icon">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .card-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .card {
+            width: 300px;
+            text-align: center;
+            margin: 10px;
+            background-color: rgb(206, 186, 186);
+        }
+
+        .card img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .card h3 {
+            margin-top: 10px;
+        }
+        p{
+            margin-top: 50px;
+            margin-left: 20%;
+            margin-right: 20%;
+            font-size: 20px;
+            background-color: lightcyan;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -70,9 +103,12 @@ $developers = [
     </nav>
 
     <div >
-        <center><h1 > About us </h1></center>
-        
+        <center><h1 style="margin-top : 30px" > About us </h1></center>
+
+        <p> We are 3 rd year students  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa vel est veritatis tempora fugit ea expedita maiores neque, tenetur ad magni odio suscipit facere cumque natus dicta officiis blanditiis asperiores! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque unde, eius, magnam maiores repellat magni culpa nesciunt quibusdam veniam commodi aperiam saepe facere ad beatae autem cum quasi? Illum, nemo! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam quia aliquid explicabo rem cumque odio maxime perspiciatis neque reiciendis, similique accusamus quidem sequi eaque! Tenetur eaque doloremque minima quaerat dolores.</p>
     </div>
+
+    <center><h1 style="margin-top : 30px" > Our Team </h1></center>
     
     <div class="card-container mt-3">
         <?php foreach ($developers as $developer): ?>
