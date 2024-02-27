@@ -1,4 +1,10 @@
 <?php
+// authentication code
+session_start();
+if (!isset($_SESSION['id'])) {
+    header('location: ./login.php');
+}
+
 // Array of developers with their names and photos
 $developers = [
     [
@@ -97,6 +103,9 @@ $developers = [
                         <a class="nav-link active" href="./aboutUs.php">About us</a>
                     </li>
                 </ul>
+            </div>
+            <div class="d-flex">
+                <a href="./logout.php" class="btn btn-danger" onclick="return confirm('Are you sure you want to logout?')">Logout</a>
             </div>
         </div>
 

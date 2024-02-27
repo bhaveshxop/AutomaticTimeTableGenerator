@@ -2,6 +2,12 @@
 // Include the database connection file
 include('../utils/dbcon.php');
 
+session_start();
+if (!isset($_SESSION['id'])) {
+    header('location: ./login.php');
+}
+
+
 // ittrate through the assigned table in the database 
 // query to fetch the assigned table from the database
 $query = "SELECT * FROM assigned";
