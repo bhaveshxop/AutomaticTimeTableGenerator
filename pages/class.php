@@ -274,10 +274,15 @@ if (isset($_POST['save'])) {
                         <input type="number" class="form-control" id="totalPeriods" name="totalPeriods" placeholder="Total periods in the week" required>
                     </div>
 
-                    <!-- Enter duration -->
+                    <!-- Enter duration  1/2 hour using select an option-->
                     <div class="mb-3">
-                        <input type="number" class="form-control" id="duration" name="duration" placeholder="Duration in hours" required>
-                    </div>
+                        <select class="form-select" id="duration" name="duration" required>
+                            <option selected>Select Duration</option>
+                            <option value="1">1 hour</option>
+                            <option value="2">2 hour</option>
+                        </select>
+                    </div>    
+                
                 </div>
 
                 <input type="hidden" name="dept_hidden" value="<?php echo $_POST['dept']; ?>">
