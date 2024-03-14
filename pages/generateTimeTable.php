@@ -143,7 +143,7 @@ if ($result) {
                         $currentTime = $collage_start_time;
                     }
 
-                    if ($clash_count > 7) {
+                    if ($clash_count == 8) {
                         // ente the logic to skpi the current period and go to the next period 
                         // also store the current period in the database 
                         // 
@@ -161,7 +161,7 @@ if ($result) {
 
                     continue;
                 }
-
+                echo "sdfosjfhsdf";
                 $query = "INSERT INTO time_table ( day, period_id, start_time, end_time) VALUES ('$currentDay', '$period_id', '$currentTime', '$temp')";
                 $result = mysqli_query($conn, $query);
                 $total_in_week--;
