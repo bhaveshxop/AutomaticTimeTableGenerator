@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "";
+$password = "Pass@123";
 $dbname = "auto_timetable_generator";
 
 // Create connection
