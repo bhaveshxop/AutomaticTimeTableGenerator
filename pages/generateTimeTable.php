@@ -7,7 +7,6 @@ if (!isset($_SESSION['id'])) {
     header('location: ./login.php');
 }
 
-
 // ittrate through the assigned table in the database 
 // query to fetch the assigned table from the database
 $query = "SELECT * FROM assigned";
@@ -161,7 +160,6 @@ if ($result) {
 
                     continue;
                 }
-                echo "sdfosjfhsdf";
                 $query = "INSERT INTO time_table ( day, period_id, start_time, end_time) VALUES ('$currentDay', '$period_id', '$currentTime', '$temp')";
                 $result = mysqli_query($conn, $query);
                 $total_in_week--;

@@ -7,7 +7,6 @@ if (!isset($_SESSION['id'])) {
     header('location: ./login.php');
 }
 
-
 // Function to add a department to the database
 function addDepartment($conn, $deptName, $dCode, $year, $sections)
 {
